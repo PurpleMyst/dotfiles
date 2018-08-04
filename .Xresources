@@ -1,0 +1,33 @@
+! colorscheme
+#include ".Xresources-colorscheme"
+
+#define FONTSIZE 15
+#define BROWSER firefox
+
+! font
+!*.font: xft:Ubuntu Mono derivative Powerline:size=15,xft:DejaVu Sans Mono for Powerline:size=15,xft:DejaVu Serif:size=15,xft:DroidSerif-Regular:size=15
+*.font: xft:Ubuntu Mono derivative Powerline:size=FONTSIZE,xft:DejaVu Sans Mono for Powerline:size=FONTSIZE,xft:DejaVu Serif:size=FONTSIZE,xft:DroidSerif-Regular:size=FONTSIZE
+
+! rofi settings
+rofi.font: Ubuntu Mono FONTSIZE
+rofi.terminal: urxvt
+
+! scrollbar
+URxvt.scrollBar: false
+
+! urxvt extensions
+URxvt.perl-ext-common: default,clipboard,matcher
+URxvt.iso14755: false
+URxvt.keysym.Shift-Control-C: perl:clipboard:copy
+URxvt.keysym.Shift-Control-V: perl:clipboard:paste
+URxvt.url-launcher: BROWSER
+URxvt.matcher.button: 1
+URxvt.matcher.rend.0: Uline Bold fg5
+
+! urxvt misc
+URxvt.urgentOnBell: true
+URxvt.intensityStyles: false
+URxvt.urlLauncher: BROWSER
+
+URxvt*transparent: true
+URxvt*shading: 50
