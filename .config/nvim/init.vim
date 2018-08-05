@@ -239,7 +239,11 @@ set completeopt-=preview
 let g:plug_window = "enew"
 
 " Airline
-let g:airline_theme = 'base16'
+if IsWSL()
+    let g:airline_theme = 'atomic'
+else
+    let g:airline_theme = 'base16'
+end
 
 " I can't be bothered to change the font in the little WSL window.
 if !IsWSL()
