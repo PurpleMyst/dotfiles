@@ -138,7 +138,7 @@ function! ReadTemplate(extension)
     let template_path = stdpath('config') . '/templates/template.' . a:extension
 
     if filereadable(template_path)
-        execute 0read template_path
+        execute '0read' template_path
 
         " Delete the last line left in the buffer, which is the empty line that
         " gets added to a new file by vim.
@@ -308,7 +308,7 @@ if executable('rustup')
 endif
 
 if executable('python3')
-    call system('python3 -m pip freeze | grep -q pyls')
+    call system('python3 -m pip freeze | grep -q python-language-server')
     let pyls_is_installed = !v:shell_error
 
     if pyls_is_installed
