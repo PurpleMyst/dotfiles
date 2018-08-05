@@ -304,12 +304,25 @@ let g:LanguageClient_serverCommands = {
     \ 'cpp': ['cquery', '--log-file=/tmp/cq.log', '--init={"cacheDirectory":"' . $HOME . '/.cache/cquery"}'],
     \ }
 
-"let g:LanguageClient_changeThrottle = 0.1
+function! HandleLanguageClientStarted()
+    NeomakeDisableBuffer
+    nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+    nnoremap K :call LanguageClient#textDocument_hover()<CR>
+    nnoremap gd :call LanguageClient#textDocument_definition()<CR>
+    nnoremap <F2> :call LanguageClient#textDocument_rename()<CR>
+endfunction
 
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-nnoremap K :call LanguageClient#textDocument_hover()<CR>
-nnoremap gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <F2> :call LanguageClient#textDocument_rename()<CR>
+function! HandleLanguageClientStopped()
+    NeomakeEnableBuffer
+    " TODO: Restore the bindings we set in HandleLanguageClientStarted.
+endfunction
+
+augroup LanguageClient_config
+    autocmd!
+    autocmd User LanguageClientStarted call HandleLanguageClientStarted()
+    autocmd User LanguageClientStopped call HandleLanguageClientStopped()
+augroup END
+
 
 " NERDTree
 map <C-n> :NERDTreeToggle<CR>
