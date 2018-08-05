@@ -134,17 +134,16 @@ augroup filetype_autocommands
     autocmd FileType lisp,clojure,scheme,rust,javascript RainbowParentheses
 augroup END
 
-" TODO: Instead of just reading the templates, use a templating engine to add
-" something like custom module names in Rust.
-function! LoadTemplate(extension)
-    try
-        silent execute '0r ' . stdpath('config') . '/templates/skeleton.' . a:extension
-    catch
-        return
-    endtry
+function! ReadTemplate(extension)
+    let template_path = stdpath('config') . '/templates/template.' . a:extension
 
-    " This only happens if a template was read, due to the "catch" above.
-    normal Gddgg
+    if filereadable(template_path)
+        execute 0read template_path
+
+        " Delete the last line left in the buffer, which is the empty line that
+        " gets added to a new file by vim.
+        normal Gddgg
+    endif
 endfunction
 
 augroup templates
@@ -152,7 +151,7 @@ augroup templates
 
   " When creating a new file, a template will be read from ~/.config/nvim/templates,
   " with the name format 'skeleton' + the extension of the current file.
-  autocmd BufNewFile *.* call LoadTemplate(expand('<afile>:e'))
+  autocmd BufNewFile *.* call ReadTemplate(expand('<afile>:e'))
 augroup END
 
 " This is really useful when starting out with Vim to build up your muscle
