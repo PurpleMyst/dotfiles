@@ -1,4 +1,15 @@
-call plug#begin('~/.config/nvim/bundle')
+" Function to check if we are in the WSL. Not every linux feature is actually
+" supported in the WSL, so sometimes we have to check.
+function! IsWSL()
+    if filereadable('/proc/version')
+        call system("grep -q Microsoft /proc/version")
+        return !v:shell_error
+    else
+        return 0
+    endif
+endfunction
+
+call plug#begin(stdpath('config') . '/bundle')
 
 " Syntax Checking (Neomake)
 Plug 'benekastah/neomake'
@@ -26,7 +37,11 @@ Plug 'mhinz/vim-startify'
 
 " Colorscheme & Transparent Background
 Plug 'chriskempson/base16-vim'
-Plug 'miyakogi/seiya.vim'
+
+" The little WSL window does not support transparency anyways.
+if !IsWSL()
+    Plug 'miyakogi/seiya.vim'
+endif
 
 " Status line (Airline)
 Plug 'bling/vim-airline'
@@ -65,9 +80,6 @@ Plug 'dart-lang/dart-vim-plugin'
 Plug 'elixir-editors/vim-elixir'
 Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
 
-" Type in Tandem
-"Plug 'typeintandem/nvim', { 'do': ':UpdateRemotePlugins' }
-
 " Rainbow parenthesis
 Plug 'junegunn/rainbow_parentheses.vim'
 
@@ -90,15 +102,19 @@ set encoding=utf-8
 set foldmethod=manual
 
 " Colorscheme gubbins.
-let base16colorspace=256
 set background=dark
-colorscheme base16-ocean
+if IsWSL()
+    colorscheme default
+else
+    let base16colorspace=256
+    colorscheme base16-ocean
+endif
 
 " Automaking is cool-io!
 " I don't really feel the need to adjust this based on battery.
-" \ 'TextChangedI': {},
 call neomake#configure#automake({
 \ 'TextChanged':  {},
+\ 'TextChangedI': {},
 \ 'InsertLeave':  {},
 \ 'BufWritePost': {'delay': 0},
 \ 'BufReadPost':  {},
@@ -122,7 +138,7 @@ augroup END
 " something like custom module names in Rust.
 function! LoadTemplate(extension)
     try
-        silent execute '0r ~/.config/nvim/templates/skeleton.' . a:extension
+        silent execute '0r ' . stdpath('config') . '/templates/skeleton.' . a:extension
     catch
         return
     endtry
@@ -196,8 +212,8 @@ set nowrap
 set fo-=t
 
 " Prevents annoying clutter of backup/swap files
-set backupdir=~/.config/nvim/backup/
-set directory=~/.config/nvim/swap/
+let &backupdir=stdpath('config') . '/backup/'
+let &directory=stdpath('config') . '/swap/'
 
 " Allows mouse usage, I mostly use this with the scroll wheel rather than
 " clicking.
@@ -205,7 +221,7 @@ set mouse=a
 
 " Writes undoable actions to a file. Useful for undoing a change even if you
 " exit vim.
-set undodir=~/.config/nvim/undo/
+let &undodir=stdpath('config') . '/undo/'
 set undofile
 
 " Shows a command's effect as you type it
@@ -224,7 +240,12 @@ let g:plug_window = "enew"
 
 " Airline
 let g:airline_theme = 'base16'
-let g:airline_powerline_fonts = 1
+
+" I can't be bothered to change the font in the little WSL window.
+if !IsWSL()
+    let g:airline_powerline_fonts = 1
+endif
+
 let g:airline#extensions#tabline#enabled = 1
 
 " Neoterm
@@ -265,7 +286,9 @@ let g:deoplete#sources#rust#rust_source_path=$HOME . '/Applications/rust/src'
 let g:startify_bookmarks = [ { 'C': '~/.config/nvim/init.vim' } ]
 
 " Seiya (transparent background)
-let g:seiya_auto_enable=1
+if !IsWSL()
+    let g:seiya_auto_enable=1
+endif
 
 " Language server
 " CTRL-F: language server, langserver

@@ -21,16 +21,20 @@ HIST_STAMPS="dd/mm/yyyy"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(tmux zsh-syntax-highlighting colored-man-pages)
 
-# GOPATH.
-  export GOPATH="$HOME/Programming/GoWorkspace"
+# $PATH section.
+  export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:"
 
-# PATHs.
-  export PATH="$HOME/bin:$HOME/.local/bin:$HOME/.nvm/versions/node/v5.9.1/bin:$HOME/Documents/kotlinc/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
-  export PATH="/usr/local/go/bin:$PATH"
-  export PATH="$HOME/.cabal/bin:$PATH"
-  export PATH="$PATH:$GOPATH/bin"
+  # Self-made scripts
+  export PATH="$HOME/bin:$PATH"
+
+  # User-only scripts intalled by things like pip.
+  export PATH="$HOME/.local/bin:$PATH"
+
+  # Cargo binaries.
   export PATH="$HOME/.cargo/bin:$PATH"
-  export PATH="/usr/lib/dart/bin:$PATH"
+
+  # PyEnv binaries.
+  export PATH="$HOME/.pyenv/bin:$PATH"
 
 # Oh My ZSH Config.
 source $ZSH/oh-my-zsh.sh
@@ -54,12 +58,26 @@ alias tmux="tmux -2"
 
 # Base16 shell colorschemes.
 if [ -f $HOME/Scripts/base16-colorscheme.sh ]; then
-	$HOME/Scripts/base16-colorscheme.sh
+    $HOME/Scripts/base16-colorscheme.sh
 fi
 
 # Pure Prompt.
 # Install with command `npm install --global pure-prompt`.
 if [ -d /usr/local/lib/node_modules/pure-prompt ]; then
-	fpath+=('/usr/local/lib/node_modules/pure-prompt/functions')
-	autoload -U promptinit; promptinit; prompt pure
+    fpath+=('/usr/local/lib/node_modules/pure-prompt/functions')
+    autoload -U promptinit; promptinit; prompt pure
+fi
+
+function command-exists {
+    command -v $@ > /dev/null
+}
+
+# PyEnv
+if command-exists pyenv; then
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+fi
+
+if [ -f ~/.fzf.zsh ]; then
+   source ~/.fzf.zsh
 fi
