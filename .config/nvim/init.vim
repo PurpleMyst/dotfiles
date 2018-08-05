@@ -296,13 +296,38 @@ endif
 " Language server
 " CTRL-F: language server, langserver
 set hidden
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ 'python': ['python3', '-m', 'pyls'],
-    \ 'lua': ['lua-lsp'],
-    \ 'c': ['cquery', '--log-file=/tmp/cq.log', '--init={"cacheDirectory":"' . $HOME . '/.cache/cquery"}'],
-    \ 'cpp': ['cquery', '--log-file=/tmp/cq.log', '--init={"cacheDirectory":"' . $HOME . '/.cache/cquery"}'],
-    \ }
+let g:LanguageClient_serverCommands = {}
+
+if executable('rustup')
+    " FIXME: Detect if the RLS is installed.
+    let rls_is_installed = 1
+
+    if rls_is_installed
+        let g:LanguageClient_serverCommands['rust'] = ['rustup', 'run', 'nightly', 'rls']
+    endif
+endif
+
+if executable('python3')
+    call system('python3 -m pip freeze | grep -q pyls')
+    let pyls_is_installed = !v:shell_error
+
+    if pyls_is_installed
+        let g:LanguageClient_serverCommands['python'] = ['python3', '-m', 'pyls']
+    endif
+endif
+
+if executable('lua-lsp')
+    let g:LanguageClient_serverCommands['lua'] = ['lua-lsp']
+endif
+
+if executable('cquery')
+    let cquery_cache_directory = stdpath('cache') . '/cquery'
+    let cquery_log_file = '/tmp/cq.log'
+    let cquery_server_command = ['cquery', '--log-file=' . cquery_log_file , '--init={"cacheDirectory":"' . cquery_cache_directory . '"}']
+
+    let g:LanguageClient_serverCommands['c'] = cquery_server_command
+    let g:LanguageClient_serverCommands['cpp'] = cquery_server_command
+endif
 
 function! HandleLanguageClientStarted()
     NeomakeDisableBuffer
