@@ -1,13 +1,8 @@
-" Function to check if we are in the WSL. Not every linux feature is actually
-" supported in the WSL, so sometimes we have to check.
-function! IsWSL()
-    if filereadable('/proc/version')
-        call system("grep -q Microsoft /proc/version")
-        return !v:shell_error
-    else
-        return 0
-    endif
-endfunction
+if filereadable('/proc/version')
+    let is_wsl = !v:shell_error
+else
+    let is_wsl = 0
+endif
 
 call plug#begin(stdpath('config') . '/bundle')
 
@@ -39,7 +34,7 @@ Plug 'mhinz/vim-startify'
 Plug 'chriskempson/base16-vim'
 
 " The little WSL window does not support transparency anyways.
-if !IsWSL()
+if !is_wsl
     Plug 'miyakogi/seiya.vim'
 endif
 
@@ -57,7 +52,7 @@ Plug 'junegunn/fzf', { 'dir': '~/Applications/fzf', 'do': './install --all' }
 Plug 'mattn/webapi-vim'
 
 " Autotag
-Plug 'craigemery/vim-autotag'
+"Plug 'craigemery/vim-autotag'
 
 " Customizable text objects (vim-textobj-user)
 Plug 'kana/vim-textobj-user'
@@ -83,6 +78,9 @@ Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
 " Rainbow parenthesis
 Plug 'junegunn/rainbow_parentheses.vim'
 
+" Measure startup time
+Plug 'tweekmonster/startuptime.vim'
+
 call plug#end()
 
 " Enable filetype plugins, but disable automatic indenting.
@@ -103,15 +101,13 @@ set foldmethod=manual
 
 " Colorscheme gubbins.
 set background=dark
-if IsWSL()
+if is_wsl
     colorscheme default
 else
     let base16colorspace=256
     colorscheme base16-ocean
 endif
 
-" Automaking is cool-io!
-" I don't really feel the need to adjust this based on battery.
 call neomake#configure#automake({
 \ 'TextChanged':  {},
 \ 'TextChangedI': {},
@@ -235,17 +231,17 @@ set completeopt-=preview
 " Plugin configuration.
 
 " Use a new buffer for the plug updates window.
-let g:plug_window = "enew"
+let g:plug_window = 'enew'
 
 " Airline
-if IsWSL()
+if is_wsl
     let g:airline_theme = 'atomic'
 else
     let g:airline_theme = 'base16'
 end
 
 " I can't be bothered to change the font in the little WSL window.
-if !IsWSL()
+if !is_wsl
     let g:airline_powerline_fonts = 1
 endif
 
@@ -260,6 +256,7 @@ let g:neoterm_default_mod = 'botright'
 let g:neomake_cpp_clang_args = ['-std=c++17', '-Wall', '-Wextra', '-Weffc++']
 let g:neomake_cpp_enabled_makers = ['clang', 'clangtidy', 'cppcheck']
 
+"" C
 let g:neomake_c_clang_args = ['-std=c99', '-Wall', '-Wextra', '-Weffc++']
 
 "" Python
@@ -289,45 +286,26 @@ let g:deoplete#sources#rust#rust_source_path=$HOME . '/Applications/rust/src'
 let g:startify_bookmarks = [ { 'C': '~/.config/nvim/init.vim' } ]
 
 " Seiya (transparent background)
-if !IsWSL()
+if !is_wsl
     let g:seiya_auto_enable=1
 endif
 
 " Language server
 " CTRL-F: language server, langserver
 set hidden
-let g:LanguageClient_serverCommands = {}
+let g:LanguageClient_serverCommands = {
+    \ 'rust'  : ['rustup', 'run', 'nightly', 'rls'],
+    \ 'python': ['python3', '-m', 'pyls'],
+    \ 'lua'   : ['lua-lsp'],
+\ }
 
-if executable('rustup')
-    " FIXME: Detect if the RLS is installed.
-    let rls_is_installed = 1
+" Cquery is special cause it requires a few custom settings.
+let cquery_cache_directory = stdpath('cache') . '/cquery'
+let cquery_log_file = '/tmp/cq.log'
+let cquery_server_command = ['cquery', '--log-file=' . cquery_log_file , '--init={"cacheDirectory":"' . cquery_cache_directory . '"}']
 
-    if rls_is_installed
-        let g:LanguageClient_serverCommands['rust'] = ['rustup', 'run', 'nightly', 'rls']
-    endif
-endif
-
-if executable('python3')
-    call system('python3 -m pip freeze | grep -q python-language-server')
-    let pyls_is_installed = !v:shell_error
-
-    if pyls_is_installed
-        let g:LanguageClient_serverCommands['python'] = ['python3', '-m', 'pyls']
-    endif
-endif
-
-if executable('lua-lsp')
-    let g:LanguageClient_serverCommands['lua'] = ['lua-lsp']
-endif
-
-if executable('cquery')
-    let cquery_cache_directory = stdpath('cache') . '/cquery'
-    let cquery_log_file = '/tmp/cq.log'
-    let cquery_server_command = ['cquery', '--log-file=' . cquery_log_file , '--init={"cacheDirectory":"' . cquery_cache_directory . '"}']
-
-    let g:LanguageClient_serverCommands['c'] = cquery_server_command
-    let g:LanguageClient_serverCommands['cpp'] = cquery_server_command
-endif
+let g:LanguageClient_serverCommands['c'] = cquery_server_command
+let g:LanguageClient_serverCommands['cpp'] = cquery_server_command
 
 function! HandleLanguageClientStarted()
     NeomakeDisableBuffer
@@ -347,7 +325,6 @@ augroup LanguageClient_config
     autocmd User LanguageClientStarted call HandleLanguageClientStarted()
     autocmd User LanguageClientStopped call HandleLanguageClientStopped()
 augroup END
-
 
 " NERDTree
 map <C-n> :NERDTreeToggle<CR>
