@@ -138,7 +138,7 @@ function! ReadTemplate(extension)
 
         " Delete the last line left in the buffer, which is the empty line that
         " gets added to a new file by vim.
-        normal Gddgg
+        normal Gddggdd
     endif
 endfunction
 
