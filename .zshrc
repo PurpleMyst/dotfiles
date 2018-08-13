@@ -81,3 +81,8 @@ fi
 if [ -f ~/.fzf.zsh ]; then
    source ~/.fzf.zsh
 fi
+
+# sccache
+if command-exists sccache; then
+    export RUSTC_WRAPPER=sccache
+fi
