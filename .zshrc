@@ -86,3 +86,6 @@ fi
 if command-exists sccache; then
     export RUSTC_WRAPPER=sccache
 fi
+
+# added by travis gem
+[ -f /home/paliddu/.travis/travis.sh ] && source /home/paliddu/.travis/travis.sh
