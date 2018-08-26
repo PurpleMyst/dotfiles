@@ -17,7 +17,7 @@ URxvt.perl-ext-common: default,matcher
 URxvt.iso14755: false
 
 !! clipboard
-! Since URxvt v9.20, there's builtin support for the clipboard with Alt-Ctrl-C
+! Since URxvt v9.20, there is builtin support for the clipboard with Alt-Ctrl-C
 ! and Alt-Ctrl-V.
 
 !! (url) matcher
@@ -40,11 +40,6 @@ URxvt.urlLauncher: BROWSER
 !URxvt.background: [80]#0d0917
 
 ! rofi settings
-rofi.color-enabled: true
-rofi.color-window: #101010, #3991f1, #6833ff
-rofi.color-normal: #101010, #ffffff, #181818, #6833ff, #ffffff
-rofi.color-active: #101010, #6833ff, #181818, #6833ff, #ffffff
-rofi.color-urgent: #101010, #f3843d, #181818, #6833ff, #ffc39c
 rofi.bw: 2
 rofi.width: -80
 rofi.scroll-method: 1

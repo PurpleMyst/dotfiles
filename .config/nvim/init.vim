@@ -12,9 +12,6 @@ Plug 'junegunn/vim-easy-align'
 " Surround
 Plug 'tpope/vim-surround'
 
-" Fugitive (git wrapper)
-Plug 'tpope/vim-fugitive'
-
 " Highlighted yank
 Plug 'machakann/vim-highlightedyank'
 
@@ -25,7 +22,7 @@ Plug 'wellle/targets.vim'
 Plug 'mhinz/vim-startify'
 
 " Colorscheme & Transparent Background
-"Plug 'chriskempson/base16-vim'
+Plug 'chriskempson/base16-vim'
 "Plug 'miyakogi/seiya.vim'
 
 " Status line (Airline)
@@ -91,7 +88,7 @@ set foldmethod=manual
 
 " Colorscheme.
 set background=dark
-colorscheme default
+colorscheme base16-paraiso
 
 call neomake#configure#automake({
 \ 'TextChanged':  {},
@@ -227,7 +224,7 @@ set completeopt-=preview
 let g:plug_window = 'enew'
 
 " Airline
-let g:airline_theme = 'atomic'
+let g:airline_theme = 'base16_paraiso'
 
 let g:airline_powerline_fonts = 0
 
