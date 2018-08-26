@@ -117,7 +117,7 @@ augroup END
 augroup rainbow
     autocmd!
 
-    autocmd FileType rust,python,lisp,clojure RainbowParenthesis
+    autocmd FileType rust,python,lisp,clojure RainbowParentheses
 augroup END
 
 function! ReadTemplate(extension)
