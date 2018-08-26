@@ -1,33 +1,52 @@
 ! colorscheme
 #include ".Xresources-colorscheme"
 
-#define FONTSIZE 15
+#define FONTSIZE 11
 #define BROWSER firefox
 
 ! font
 !*.font: xft:Ubuntu Mono derivative Powerline:size=15,xft:DejaVu Sans Mono for Powerline:size=15,xft:DejaVu Serif:size=15,xft:DroidSerif-Regular:size=15
-*.font: xft:Ubuntu Mono derivative Powerline:size=FONTSIZE,xft:DejaVu Sans Mono for Powerline:size=FONTSIZE,xft:DejaVu Serif:size=FONTSIZE,xft:DroidSerif-Regular:size=FONTSIZE
-
-! rofi settings
-rofi.font: Ubuntu Mono FONTSIZE
-rofi.terminal: urxvt
+!*.font: xft:Ubuntu Mono derivative Powerline:size=FONTSIZE,xft:DejaVu Sans Mono for Powerline:size=FONTSIZE,xft:DejaVu Serif:size=FONTSIZE,xft:DroidSerif-Regular:size=FONTSIZE
+*.font: xft:DejaVu Sans Mono:size=FONTSIZE
 
 ! scrollbar
 URxvt.scrollBar: false
 
 ! urxvt extensions
-URxvt.perl-ext-common: default,clipboard,matcher
+URxvt.perl-ext-common: default,matcher
 URxvt.iso14755: false
-URxvt.keysym.Shift-Control-C: perl:clipboard:copy
-URxvt.keysym.Shift-Control-V: perl:clipboard:paste
+
+!! clipboard
+! Since URxvt v9.20, there's builtin support for the clipboard with Alt-Ctrl-C
+! and Alt-Ctrl-V.
+
+!! (url) matcher
 URxvt.url-launcher: BROWSER
 URxvt.matcher.button: 1
 URxvt.matcher.rend.0: Uline Bold fg5
+
+! urxvt transparency
+!URxvt*transparent: true
+!URxvt*shading: 50
 
 ! urxvt misc
 URxvt.urgentOnBell: true
 URxvt.intensityStyles: false
 URxvt.urlLauncher: BROWSER
 
-URxvt*transparent: true
-URxvt*shading: 50
+! urxvt geometry and color
+!urxvt*geometry: 140x40
+!URxvt.depth:      32
+!URxvt.background: [80]#0d0917
+
+! rofi settings
+rofi.color-enabled: true
+rofi.color-window: #101010, #3991f1, #6833ff
+rofi.color-normal: #101010, #ffffff, #181818, #6833ff, #ffffff
+rofi.color-active: #101010, #6833ff, #181818, #6833ff, #ffffff
+rofi.color-urgent: #101010, #f3843d, #181818, #6833ff, #ffc39c
+rofi.bw: 2
+rofi.width: -80
+rofi.scroll-method: 1
+rofi.font: DejaVu Sans Mono FONTSIZE
+rofi.terminal: urxvt

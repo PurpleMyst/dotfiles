@@ -1,9 +1,3 @@
-if filereadable('/proc/version')
-    let is_wsl = !v:shell_error
-else
-    let is_wsl = 0
-endif
-
 call plug#begin(stdpath('config') . '/bundle')
 
 " Syntax Checking (Neomake)
@@ -31,12 +25,8 @@ Plug 'wellle/targets.vim'
 Plug 'mhinz/vim-startify'
 
 " Colorscheme & Transparent Background
-Plug 'chriskempson/base16-vim'
-
-" The little WSL window does not support transparency anyways.
-if !is_wsl
-    Plug 'miyakogi/seiya.vim'
-endif
+"Plug 'chriskempson/base16-vim'
+"Plug 'miyakogi/seiya.vim'
 
 " Status line (Airline)
 Plug 'bling/vim-airline'
@@ -99,14 +89,9 @@ set encoding=utf-8
 " large files.
 set foldmethod=manual
 
-" Colorscheme gubbins.
+" Colorscheme.
 set background=dark
-if is_wsl
-    colorscheme default
-else
-    let base16colorspace=256
-    colorscheme base16-ocean
-endif
+colorscheme default
 
 call neomake#configure#automake({
 \ 'TextChanged':  {},
@@ -116,18 +101,26 @@ call neomake#configure#automake({
 \ 'BufReadPost':  {},
 \ }, 500)
 
-augroup filetype_autocommands
+augroup style
     autocmd!
 
     " Use 2-space wide indents in these languages, as is convention.
-    autocmd FileType lisp,clojure,ruby,crystal,haskell,yaml,dart 
+    autocmd FileType lisp,clojure,haskell,yaml,dart 
         \ setlocal shiftwidth=2 softtabstop=2 tabstop=2
+augroup END
 
-    " Because rust.vim likes to set smart indent.
+augroup rust
+    autocmd!
+
+    " rust.vim <3
     autocmd FileType rust setlocal nosmartindent
     autocmd BufWritePre *.rs silent! RustFmt
+augroup END
 
-    autocmd FileType lisp,clojure,scheme,rust,javascript RainbowParentheses
+augroup rainbow
+    autocmd!
+
+    autocmd FileType rust,python,lisp,clojure RainbowParenthesis
 augroup END
 
 function! ReadTemplate(extension)
@@ -234,16 +227,9 @@ set completeopt-=preview
 let g:plug_window = 'enew'
 
 " Airline
-if is_wsl
-    let g:airline_theme = 'atomic'
-else
-    let g:airline_theme = 'base16'
-end
+let g:airline_theme = 'atomic'
 
-" I can't be bothered to change the font in the little WSL window.
-if !is_wsl
-    let g:airline_powerline_fonts = 1
-endif
+let g:airline_powerline_fonts = 0
 
 let g:airline#extensions#tabline#enabled = 1
 
@@ -286,9 +272,7 @@ let g:deoplete#sources#rust#rust_source_path=$HOME . '/Applications/rust/src'
 let g:startify_bookmarks = [ { 'C': '~/.config/nvim/init.vim' } ]
 
 " Seiya (transparent background)
-if !is_wsl
-    let g:seiya_auto_enable=1
-endif
+"let g:seiya_auto_enable=1
 
 " Language server
 " CTRL-F: language server, langserver
@@ -307,6 +291,7 @@ let cquery_server_command = ['cquery', '--log-file=' . cquery_log_file , '--init
 let g:LanguageClient_serverCommands['c'] = cquery_server_command
 let g:LanguageClient_serverCommands['cpp'] = cquery_server_command
 
+" XXX: Is this per-buffer?
 function! HandleLanguageClientStarted()
     NeomakeDisableBuffer
     nnoremap <F5> :call LanguageClient_contextMenu()<CR>
