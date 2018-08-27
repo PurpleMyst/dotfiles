@@ -1,13 +1,14 @@
 ! colorscheme
 #include ".Xresources-colorscheme"
 
-#define FONTSIZE 11
+#define FONTSIZE 12
 #define BROWSER firefox
 
 ! font
 !*.font: xft:Ubuntu Mono derivative Powerline:size=15,xft:DejaVu Sans Mono for Powerline:size=15,xft:DejaVu Serif:size=15,xft:DroidSerif-Regular:size=15
 !*.font: xft:Ubuntu Mono derivative Powerline:size=FONTSIZE,xft:DejaVu Sans Mono for Powerline:size=FONTSIZE,xft:DejaVu Serif:size=FONTSIZE,xft:DroidSerif-Regular:size=FONTSIZE
-*.font: xft:DejaVu Sans Mono:size=FONTSIZE
+!*.font: xft:DejaVu Sans Mono:size=FONTSIZE
+*.font: xft:Everson Mono:size=FONTSIZE
 
 ! scrollbar
 URxvt.scrollBar: false
