@@ -45,9 +45,6 @@ export EDITOR='nvim'
 export BROWSER='firefox'
 export TERMINAL='urxvt'
 
-# Fake being a 256 color xterm, for... reasons.
-export TERM=xterm-256color
-
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
@@ -88,4 +85,7 @@ if command-exists sccache; then
 fi
 
 # added by travis gem
-[ -f /home/paliddu/.travis/travis.sh ] && source /home/paliddu/.travis/travis.sh
+[ -f ~/.travis/travis.sh ] && source ~/.travis/travis.sh
+
+# colorscheme
+[ -f ~/Applications/base16-paraiso.sh ] && ~/Applications/base16-paraiso.sh

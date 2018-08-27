@@ -89,6 +89,7 @@ set foldmethod=manual
 
 " Colorscheme.
 set background=dark
+let base16colorspace=256
 colorscheme base16-paraiso
 
 call neomake#configure#automake({
