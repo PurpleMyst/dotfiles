@@ -9,6 +9,9 @@ Plug 'kassio/neoterm', { 'commit': '5a65cc762799a9d077bcb2e7cbfbd8c57dcfebfb' }
 " EasyAlign
 Plug 'junegunn/vim-easy-align'
 
+" Fugitive
+Plug 'tpope/vim-fugitive'
+
 " Surround
 Plug 'tpope/vim-surround'
 
@@ -31,15 +34,11 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Auto-Completion (Deoplete)
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-"Plug 'Shougo/deoplete-clangx'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 Plug 'junegunn/fzf', { 'dir': '~/Applications/fzf', 'do': './install --all' }
 
 " WebApi-vim (for rust.vim)
 Plug 'mattn/webapi-vim'
-
-" Autotag
-"Plug 'craigemery/vim-autotag'
 
 " Customizable text objects (vim-textobj-user)
 Plug 'kana/vim-textobj-user'
@@ -61,6 +60,8 @@ Plug 'rust-lang/rust.vim'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'elixir-editors/vim-elixir'
 Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
+
+Plug 'AndrewRadev/splitjoin.vim'
 
 " Rainbow parenthesis
 Plug 'junegunn/rainbow_parentheses.vim'
