@@ -4,7 +4,7 @@ call plug#begin(stdpath('config') . '/bundle')
 Plug 'benekastah/neomake'
 
 " Better Terminals (Neoterm)
-Plug 'kassio/neoterm'
+Plug 'kassio/neoterm', { 'commit': '5a65cc762799a9d077bcb2e7cbfbd8c57dcfebfb' }
 
 " EasyAlign
 Plug 'junegunn/vim-easy-align'
