@@ -78,3 +78,6 @@ fi
 
 # colorscheme
 [ -f ~/Applications/base16-paraiso.sh ] && ~/Applications/base16-paraiso.sh
+
+# ls colors
+export LS_COLORS=$LS_COLORS:'tw=01;35:ow=01;35:'
