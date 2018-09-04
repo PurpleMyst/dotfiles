@@ -33,7 +33,7 @@ plugins=(tmux zsh-syntax-highlighting colored-man-pages)
   # Cargo binaries.
   export PATH="$HOME/.cargo/bin:$PATH"
 
-  # PyEnv binaries.
+  # PyEnv shims.
   export PATH="$HOME/.pyenv/bin:$PATH"
 
 # Oh My ZSH Config.
@@ -53,18 +53,6 @@ export TERMINAL='urxvt'
 # "Vital" aliases go here, the rest are in $ZSH_CUSTOM.
 alias tmux="tmux -2"
 
-# Base16 shell colorschemes.
-if [ -f $HOME/Scripts/base16-colorscheme.sh ]; then
-    $HOME/Scripts/base16-colorscheme.sh
-fi
-
-# Pure Prompt.
-# Install with command `npm install --global pure-prompt`.
-if [ -d /usr/local/lib/node_modules/pure-prompt ]; then
-    fpath+=('/usr/local/lib/node_modules/pure-prompt/functions')
-    autoload -U promptinit; promptinit; prompt pure
-fi
-
 function command-exists {
     command -v $@ > /dev/null
 }
@@ -75,6 +63,7 @@ if command-exists pyenv; then
     eval "$(pyenv virtualenv-init -)"
 fi
 
+# fzf
 if [ -f ~/.fzf.zsh ]; then
    source ~/.fzf.zsh
 fi
