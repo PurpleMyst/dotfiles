@@ -44,5 +44,5 @@ URxvt.urlLauncher: BROWSER
 rofi.bw: 2
 rofi.width: -80
 rofi.scroll-method: 1
-rofi.font: DejaVu Sans Mono FONTSIZE
+rofi.font: FiraCode FONTSIZE
 rofi.terminal: urxvt
