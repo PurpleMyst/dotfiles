@@ -1,0 +1,7 @@
+! vim: filetype=xdefaults
+
+rofi.bw: 2
+rofi.width: -80
+rofi.scroll-method: 1
+rofi.font: FiraCode FONTSIZE
+rofi.terminal: kitty

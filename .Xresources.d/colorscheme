@@ -1,3 +1,4 @@
+! vim: filetype=xdefaults
 ! Base16 Paraiso
 ! Scheme: Jan T. Sott
 
@@ -19,11 +20,7 @@
 #define base0F #e96ba8
 
 *foreground:   base05
-#ifdef background_opacity
-*background:   [background_opacity]base00
-#else
 *background:   base00
-#endif
 *cursorColor:  base05
 
 *color0:       base00
