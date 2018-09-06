@@ -64,14 +64,10 @@ if command-exists pyenv; then
 fi
 
 # fzf
-if [ -f ~/.fzf.zsh ]; then
-   source ~/.fzf.zsh
-fi
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # sccache
-if command-exists sccache; then
-    export RUSTC_WRAPPER=sccache
-fi
+command-exists sccache && export RUSTC_WRAPPER=sccache
 
 # added by travis gem
 [ -f ~/.travis/travis.sh ] && source ~/.travis/travis.sh

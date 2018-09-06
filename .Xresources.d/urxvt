@@ -1,0 +1,32 @@
+! vim: filetype=xdefaults foldmethod=marker
+
+! Scrollbar {{{
+URxvt.scrollBar: false
+! }}}
+
+! Extensions {{{
+URxvt.perl-ext-common: default,matcher
+URxvt.iso14755: false
+! }}}
+
+! Clipboard {{{
+! Since URxvt v9.20, there is builtin support for the clipboard with Alt-Ctrl-C
+! and Alt-Ctrl-V.
+! }}}
+
+! URL matcher {{{
+URxvt.url-launcher: BROWSER
+URxvt.matcher.button: 1
+URxvt.matcher.rend.0: Uline Bold fg5
+! }}}
+
+! Transparency {{{
+URxvt*transparent: true
+URxvt*shading: 50
+! }}}
+
+! Misc {{{
+URxvt.urgentOnBell: true
+URxvt.intensityStyles: false
+URxvt.urlLauncher: BROWSER
+! }}}

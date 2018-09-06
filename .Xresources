@@ -3,4 +3,5 @@
 
 #include ".Xresources.d/general"
 #include ".Xresources.d/colorscheme"
+#include ".Xresources.d/urxvt"
 #include ".Xresources.d/rofi"
