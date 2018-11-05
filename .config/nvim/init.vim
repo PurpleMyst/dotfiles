@@ -66,6 +66,9 @@ Plug 'AndrewRadev/splitjoin.vim'
 " Rainbow parenthesis
 Plug 'junegunn/rainbow_parentheses.vim'
 
+" Easymotion
+Plug 'easymotion/vim-easymotion'
+
 " Measure startup time
 Plug 'tweekmonster/startuptime.vim'
 

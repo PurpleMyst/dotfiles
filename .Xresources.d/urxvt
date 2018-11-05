@@ -21,8 +21,8 @@ URxvt.matcher.rend.0: Uline Bold fg5
 ! }}}
 
 ! Transparency {{{
-URxvt*transparent: true
-URxvt*shading: 50
+!URxvt*transparent: true
+!URxvt*shading: 50
 ! }}}
 
 ! Misc {{{
