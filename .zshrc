@@ -73,7 +73,7 @@ command-exists sccache && export RUSTC_WRAPPER=sccache
 [ -f ~/.travis/travis.sh ] && source ~/.travis/travis.sh
 
 # colorscheme
-[ -f ~/Applications/base16-paraiso.sh ] && ~/Applications/base16-paraiso.sh
+test -x ~/.colorscheme.sh && ~/.colorscheme.sh
 
 # ls colors
 export LS_COLORS=$LS_COLORS:'tw=01;35:ow=01;35:'

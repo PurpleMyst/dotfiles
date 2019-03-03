@@ -4,7 +4,7 @@ call plug#begin(stdpath('config') . '/bundle')
 Plug 'benekastah/neomake'
 
 " Better Terminals (Neoterm)
-Plug 'kassio/neoterm', { 'commit': '5a65cc762799a9d077bcb2e7cbfbd8c57dcfebfb' }
+Plug 'kassio/neoterm'
 
 " EasyAlign
 Plug 'junegunn/vim-easy-align'
@@ -26,7 +26,6 @@ Plug 'mhinz/vim-startify'
 
 " Colorscheme & Transparent Background
 Plug 'chriskempson/base16-vim'
-"Plug 'miyakogi/seiya.vim'
 
 " Status line (Airline)
 Plug 'bling/vim-airline'
@@ -36,9 +35,6 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 Plug 'junegunn/fzf', { 'dir': '~/Applications/fzf', 'do': './install --all' }
-
-" WebApi-vim (for rust.vim)
-Plug 'mattn/webapi-vim'
 
 " Customizable text objects (vim-textobj-user)
 Plug 'kana/vim-textobj-user'
@@ -60,7 +56,6 @@ Plug 'rust-lang/rust.vim'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'elixir-editors/vim-elixir'
 Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
-
 Plug 'AndrewRadev/splitjoin.vim'
 
 " Rainbow parenthesis
@@ -92,8 +87,13 @@ set foldmethod=manual
 
 " Colorscheme.
 set background=dark
-let base16colorspace=256
-colorscheme base16-paraiso
+
+if has('wsl')
+    colorscheme moon
+else
+    let base16colorspace=256
+    colorscheme base16-material-darker
+endif
 
 call neomake#configure#automake({
 \ 'TextChanged':  {},
@@ -219,6 +219,7 @@ set inccommand=nosplit
 
 set fillchars+=stl:\ ,stlnc:\   
 
+
 " TODO: Instead of just not showing the preview window, close it once we do
 " choose a completion.
 set completeopt-=preview
@@ -228,10 +229,13 @@ set completeopt-=preview
 " Use a new buffer for the plug updates window.
 let g:plug_window = 'enew'
 
-" Airline
 let g:airline_theme = 'base16_paraiso'
 
-let g:airline_powerline_fonts = 1
+if has('wsl')
+    let g:airline_powerline_fonts = 0
+else
+    let g:airline_powerline_fonts = 1
+endif
 
 let g:airline#extensions#tabline#enabled = 1
 
@@ -283,6 +287,37 @@ let g:LanguageClient_serverCommands = {
     \ 'rust'  : ['rustup', 'run', 'nightly', 'rls'],
     \ 'python': ['python3', '-m', 'pyls'],
     \ 'lua'   : ['lua-lsp'],
+\ }
+
+let g:LanguageClient_diagnosticsDisplay = {
+\     1: {
+\         'name': 'Error',
+\         'texthl': 'ALEError',
+\         'signText': 'X',
+\         'signTexthl': 'ALEErrorSign',
+\         'virtualTexthl': 'Error',
+\     },
+\     2: {
+\         'name': 'Warning',
+\         'texthl': 'ALEWarning',
+\         'signText': '!',
+\         'signTexthl': 'ALEWarningSign',
+\         'virtualTexthl': 'Todo',
+\     },
+\     3: {
+\         'name': 'Information',
+\         'texthl': 'ALEInfo',
+\         'signText': 'i',
+\         'signTexthl': 'ALEInfoSign',
+\         'virtualTexthl': 'Todo',
+\     },
+\     4: {
+\         'name': 'Hint',
+\         'texthl': 'ALEInfo',
+\         'signText': 'h',
+\         'signTexthl': 'ALEInfoSign',
+\         'virtualTexthl': 'Todo',
+\     },
 \ }
 
 " Cquery is special cause it requires a few custom settings.
