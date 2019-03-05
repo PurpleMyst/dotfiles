@@ -33,9 +33,6 @@ plugins=(tmux zsh-syntax-highlighting colored-man-pages)
   # Cargo binaries.
   export PATH="$HOME/.cargo/bin:$PATH"
 
-  # PyEnv shims.
-  export PATH="$HOME/.pyenv/bin:$PATH"
-
 # Oh My ZSH Config.
 source $ZSH/oh-my-zsh.sh
 
@@ -57,14 +54,11 @@ function command-exists {
     command -v $@ > /dev/null
 }
 
-# PyEnv
-if command-exists pyenv; then
-    eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
-fi
+# GhcUp
+test -f ~/.ghcup/env && source ~/.ghcup/env
 
 # fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+test -f ~/.fzf.zsh  && source ~/.fzf.zsh
 
 # sccache
 command-exists sccache && export RUSTC_WRAPPER=sccache
@@ -75,5 +69,8 @@ command-exists sccache && export RUSTC_WRAPPER=sccache
 # colorscheme
 test -x ~/.colorscheme.sh && ~/.colorscheme.sh
 
+# weechat secure passphrase
+test -f ~/.weechat-passphrase.txt && export WEECHAT_PASSPHRASE=$(cat ~/.weechat-passphrase.txt)
+
 # ls colors
-export LS_COLORS=$LS_COLORS:'tw=01;35:ow=01;35:'
+test -f ~/.ls_colors && eval $(dircolors -b ~/.ls_colors)

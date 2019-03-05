@@ -56,6 +56,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'elixir-editors/vim-elixir'
 Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
+Plug 'ziglang/zig.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 
 " Rainbow parenthesis

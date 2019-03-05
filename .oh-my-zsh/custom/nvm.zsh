@@ -1,6 +1,6 @@
-export NVM_DIR=$HOME/.nvm
+export NVM_DIR="$HOME/.nvm"
 
-if [ -d $NVM_DIR ]; then
+if [ -d "$NVM_DIR" ]; then
     NODE_GLOBALS=(`find $NVM_DIR/versions/node/ -maxdepth 3 -type l -wholename '*/bin/*' | xargs -n1 basename | sort | uniq`)
     NODE_GLOBALS+=("node")
     NODE_GLOBALS+=("nvm")

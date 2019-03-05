@@ -1,18 +1,12 @@
 function termbin {
     # Upload a given filename to termbin.
-
-    if [ $# -ne 1 ]; then
-        echo "USAGE: $0 FILENAME"
-        return 1
+    if [ $# -le 1 ]; then
+        filename="/dev/stdin"
     else
-        nc termbin.com 9999 < "$1"
+        filename="$1"
     fi
-}
 
-function termbin-stdin {
-    # Upload stdin's contents to termbin.
-
-    termbin /dev/stdin
+    nc termbin.com 9999 < "$filename"
 }
 
 function termbin-dir {
