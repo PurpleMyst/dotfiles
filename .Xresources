@@ -2,6 +2,8 @@
 #define MAINFONT FiraCode
 #define BROWSER firefox
 
+! TODO: Replace a lot of stuff with #define.
+
 #include ".Xresources.d/general"
 #include ".Xresources.d/colorscheme"
 #include ".Xresources.d/urxvt"

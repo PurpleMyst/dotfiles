@@ -1,8 +1,8 @@
 # base16 builder
 BASE16_BUILDER_REPO="https://github.com/InspectorMustache/base16-builder-python.git"
+BASE16_DIR="$HOME/Applications/base16-builder/output"
 
-export BASE16_DIR="$HOME/Applications/base16-builder/output"
-export BASE16_COLORSCHEME="unikitty-dark"
+export BASE16_COLORSCHEME=$(cat ~/.colorscheme)
 
 _build_colorschemes() {
     if ! [ -d $BASE16_DIR ]; then
@@ -17,21 +17,28 @@ _build_colorschemes() {
 }
 
 set_colorscheme() {
-    if [ $# -eq 1 ]; then
-        export BASE16_COLORSCHEME=$1
+    if [ $# -ne 1 ]; then
+        echo "USAGE: $0 COLORSCHEME"
+        return 1
     fi
 
-    sh $BASE16_DIR/shell/scripts/base16-$BASE16_COLORSCHEME.sh
+    echo $1 > ~/.colorscheme
+    export BASE16_COLORSCHEME=$1
 
+    # set x colors
     BASE16_XRESOURCES=$BASE16_DIR/xresources/xresources/base16-$BASE16_COLORSCHEME-256.Xresources
-    if ! cmp --silent ~/.Xresources.d/colorscheme $BASE16_XRESOURCES; then
+    if [ -f $BASE16_XRESOURCES ]; then
         test -f ~/.Xresources.d/colorscheme && unlink ~/.Xresources.d/colorscheme
-        ln $BASE16_XRESOURCES ~/.Xresources.d/colorscheme
-        which xrdb > /dev/null && xrdb .Xresources
+        ln $BASE16_DIR/xresources/xresources/base16-$BASE16_COLORSCHEME-256.Xresources ~/.Xresources.d/colorscheme
+        which xrdb > /dev/null && xrdb ~/.Xresources
+    fi
+
+    # set shell colors
+    if [ -f $BASE16_DIR/shell/scripts/base16-$BASE16_COLORSCHEME.sh ]; then
+        sh $BASE16_DIR/shell/scripts/base16-$BASE16_COLORSCHEME.sh
     fi
 }
 
-# TODO: Add `set_random_colorscheme`.
-
-_build_colorschemes
-set_colorscheme
+if [ -f $BASE16_DIR/shell/scripts/base16-$BASE16_COLORSCHEME.sh ]; then
+    sh $BASE16_DIR/shell/scripts/base16-$BASE16_COLORSCHEME.sh
+fi
