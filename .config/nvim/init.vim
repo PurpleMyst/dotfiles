@@ -27,9 +27,8 @@ Plug 'mhinz/vim-startify'
 " Colorscheme & Transparent Background
 Plug 'chriskempson/base16-vim'
 
-" Status line (Airline)
-Plug 'bling/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+" (NeoVim + tmux) status line
+Plug 'bling/vim-airline' | Plug 'edkolev/tmuxline.vim' | Plug 'vim-airline/vim-airline-themes'
 
 " Auto-Completion (Deoplete)
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -86,15 +85,14 @@ set encoding=utf-8
 " large files.
 set foldmethod=manual
 
+" MapLeader
+let mapleader = ' '
+
 " Colorscheme.
 set background=dark
-
-if has('wsl')
-    colorscheme moon
-else
-    let base16colorspace=256
-    colorscheme base16-material-darker
-endif
+"set termguicolors
+let base16colorspace=256
+execute ":colorscheme base16-" . $BASE16_COLORSCHEME
 
 call neomake#configure#automake({
 \ 'TextChanged':  {},
@@ -108,7 +106,7 @@ augroup style
     autocmd!
 
     " Use 2-space wide indents in these languages, as is convention.
-    autocmd FileType lisp,clojure,haskell,yaml,dart 
+    autocmd FileType lisp,clojure,haskell,yaml,dart
         \ setlocal shiftwidth=2 softtabstop=2 tabstop=2
 augroup END
 
@@ -120,10 +118,18 @@ augroup rust
     autocmd BufWritePre *.rs silent! RustFmt
 augroup END
 
+augroup haskell
+    autocmd!
+
+    " Run tests with <Leader>t, assuming ghci is started in a terminal window.
+    autocmd FileType haskell nnoremap <Leader>t :T :reload<CR>:T :main<CR>
+augroup END
+
+
 augroup rainbow
     autocmd!
 
-    autocmd FileType rust,python,lisp,clojure RainbowParentheses
+    autocmd FileType rust,python,lisp,clojure,haskell RainbowParentheses
 augroup END
 
 function! ReadTemplate(extension)
@@ -220,10 +226,9 @@ set inccommand=nosplit
 
 set fillchars+=stl:\ ,stlnc:\   
 
-
 " TODO: Instead of just not showing the preview window, close it once we do
 " choose a completion.
-set completeopt-=preview
+"set completeopt-=preview
 
 " Plugin configuration.
 
@@ -232,11 +237,8 @@ let g:plug_window = 'enew'
 
 let g:airline_theme = 'base16_paraiso'
 
-if has('wsl')
-    let g:airline_powerline_fonts = 0
-else
-    let g:airline_powerline_fonts = 1
-endif
+let g:airline_powerline_fonts = 0
+let g:tmuxline_powerline_separators = 0
 
 let g:airline#extensions#tabline#enabled = 1
 
@@ -285,40 +287,10 @@ let g:startify_bookmarks = [ { 'C': '~/.config/nvim/init.vim' } ]
 " CTRL-F: language server, langserver
 set hidden
 let g:LanguageClient_serverCommands = {
-    \ 'rust'  : ['rustup', 'run', 'nightly', 'rls'],
-    \ 'python': ['python3', '-m', 'pyls'],
-    \ 'lua'   : ['lua-lsp'],
-\ }
-
-let g:LanguageClient_diagnosticsDisplay = {
-\     1: {
-\         'name': 'Error',
-\         'texthl': 'ALEError',
-\         'signText': 'X',
-\         'signTexthl': 'ALEErrorSign',
-\         'virtualTexthl': 'Error',
-\     },
-\     2: {
-\         'name': 'Warning',
-\         'texthl': 'ALEWarning',
-\         'signText': '!',
-\         'signTexthl': 'ALEWarningSign',
-\         'virtualTexthl': 'Todo',
-\     },
-\     3: {
-\         'name': 'Information',
-\         'texthl': 'ALEInfo',
-\         'signText': 'i',
-\         'signTexthl': 'ALEInfoSign',
-\         'virtualTexthl': 'Todo',
-\     },
-\     4: {
-\         'name': 'Hint',
-\         'texthl': 'ALEInfo',
-\         'signText': 'h',
-\         'signTexthl': 'ALEInfoSign',
-\         'virtualTexthl': 'Todo',
-\     },
+    \ 'rust'   : ['rustup', 'run', 'nightly', 'rls'],
+    \ 'python' : ['python3', '-m', 'pyls'],
+    \ 'lua'    : ['lua-lsp'],
+    \ 'haskell': ['hie-wrapper'],
 \ }
 
 " Cquery is special cause it requires a few custom settings.
@@ -351,3 +323,8 @@ augroup END
 
 " NERDTree
 map <C-n> :NERDTreeToggle<CR>
+
+" TmuxLine
+let g:airline#extensions#tmuxline#enabled = 0
+let g:tmuxline_theme = 'iceberg'
+let g:tmuxline_preset = 'tmux'

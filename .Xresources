@@ -1,4 +1,5 @@
 #define FONTSIZE 11
+#define MAINFONT FiraCode
 #define BROWSER firefox
 
 #include ".Xresources.d/general"

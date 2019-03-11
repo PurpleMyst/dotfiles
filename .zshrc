@@ -37,22 +37,12 @@ plugins=(tmux zsh-syntax-highlighting colored-man-pages)
 source $ZSH/oh-my-zsh.sh
 
 # Preferred applications.
-# N.B. URxvt looks at a setting in .Xresources for its browser, not at $BROWSER.
 export EDITOR='nvim'
 export BROWSER='firefox'
 export TERMINAL='urxvt'
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-
 # "Vital" aliases go here, the rest are in $ZSH_CUSTOM.
 alias tmux="tmux -2"
-
-function command-exists {
-    command -v $@ > /dev/null
-}
 
 # GhcUp
 test -f ~/.ghcup/env && source ~/.ghcup/env
@@ -60,14 +50,8 @@ test -f ~/.ghcup/env && source ~/.ghcup/env
 # fzf
 test -f ~/.fzf.zsh  && source ~/.fzf.zsh
 
-# sccache
-command-exists sccache && export RUSTC_WRAPPER=sccache
-
 # added by travis gem
 [ -f ~/.travis/travis.sh ] && source ~/.travis/travis.sh
-
-# colorscheme
-test -x ~/.colorscheme.sh && ~/.colorscheme.sh
 
 # weechat secure passphrase
 test -f ~/.weechat-passphrase.txt && export WEECHAT_PASSPHRASE=$(cat ~/.weechat-passphrase.txt)
