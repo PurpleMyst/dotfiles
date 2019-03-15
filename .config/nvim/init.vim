@@ -1,30 +1,40 @@
+"""""""""""
+" PLUGINS "
+"""""""""""
+
 call plug#begin(stdpath('config') . '/bundle')
 
-" Syntax Checking (Neomake)
+" Syntax Checking
 Plug 'benekastah/neomake'
 
-" Better Terminals (Neoterm)
+" Better Terminals
 Plug 'kassio/neoterm'
 
 " EasyAlign
 Plug 'junegunn/vim-easy-align'
 
-" Fugitive
+" Git integration
 Plug 'tpope/vim-fugitive'
 
-" Surround
+" Easy parenthesis
 Plug 'tpope/vim-surround'
 
-" Highlighted yank
+" Repeating of plugins
+Plug 'tpope/vim-repeat'
+
+" Easy commenting
+Plug 'tpope/vim-commentary'
+
+" Highlight what you yank
 Plug 'machakann/vim-highlightedyank'
 
-" Targets
+" More targets
 Plug 'wellle/targets.vim'
 
-" Start page (Startify)
+" Start page
 Plug 'mhinz/vim-startify'
 
-" Colorscheme & Transparent Background
+" Colorscheme
 Plug 'chriskempson/base16-vim'
 
 " (NeoVim + tmux) status line
@@ -35,7 +45,7 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 Plug 'junegunn/fzf', { 'dir': '~/Applications/fzf', 'do': './install --all' }
 
-" Customizable text objects (vim-textobj-user)
+" Custom text objects
 Plug 'kana/vim-textobj-user'
 Plug 'bps/vim-textobj-python'
 Plug 'glts/vim-textobj-comment'
@@ -64,139 +74,65 @@ Plug 'junegunn/rainbow_parentheses.vim'
 " Easymotion
 Plug 'easymotion/vim-easymotion'
 
+" Better folding
+Plug 'Konfekt/FastFold'
+
 " Measure startup time
 Plug 'tweekmonster/startuptime.vim'
 
 call plug#end()
 
-" Enable filetype plugins, but disable automatic indenting.
-" Some plugins are sneaky and pass through the cracks, like rust.vim
+""""""""""""""""
+" VIM SETTINGS "
+""""""""""""""""
+
+" Enable filetype plugins, but disable automatic indenting
 filetype plugin on
 filetype indent off
 
-" Enable syntax highlighting.
+" Enable syntax highlighting
 syntax on
 
-" Set the encoding to UTF-8. I don't know why you'd want anything else.
-set encoding=utf-8
+" Enable syntax folding (<3 FastFold)
+set foldmethod=syntax
 
-" Make folds only show up if manually created.
-" While foldmethod=syntax is pretty cool, it's also pretty slow, especially on
-" large files.
-set foldmethod=manual
-
-" MapLeader
+" Key used for custom commands
 let mapleader = ' '
 
-" Colorscheme.
-set background=dark
-"set termguicolors
-let base16colorspace=256
-execute ":colorscheme base16-" . $BASE16_COLORSCHEME
-
-call neomake#configure#automake({
-\ 'TextChanged':  {},
-\ 'TextChangedI': {},
-\ 'InsertLeave':  {},
-\ 'BufWritePost': {'delay': 0},
-\ 'BufReadPost':  {},
-\ }, 500)
-
-augroup style
-    autocmd!
-
-    " Use 2-space wide indents in these languages, as is convention.
-    autocmd FileType lisp,clojure,haskell,yaml,dart
-        \ setlocal shiftwidth=2 softtabstop=2 tabstop=2
-augroup END
-
-augroup rust
-    autocmd!
-
-    " rust.vim <3
-    autocmd FileType rust setlocal nosmartindent
-    autocmd BufWritePre *.rs silent! RustFmt
-augroup END
-
-augroup haskell
-    autocmd!
-
-    " Run tests with <Leader>t, assuming ghci is started in a terminal window.
-    autocmd FileType haskell nnoremap <Leader>t :T :reload<CR>:T :main<CR>
-augroup END
-
-
-augroup rainbow
-    autocmd!
-
-    autocmd FileType rust,python,lisp,clojure,haskell RainbowParentheses
-augroup END
-
-function! ReadTemplate(extension)
-    let template_path = stdpath('config') . '/templates/template.' . a:extension
-
-    if filereadable(template_path)
-        execute '0read' template_path
-
-        " Delete the last line left in the buffer, which is the empty line that
-        " gets added to a new file by vim.
-        normal Gddggdd
-    endif
-endfunction
-
-augroup templates
-  autocmd!
-
-  " When creating a new file, a template will be read from ~/.config/nvim/templates,
-  " with the name format 'skeleton' + the extension of the current file.
-  autocmd BufNewFile *.* call ReadTemplate(expand('<afile>:e'))
-augroup END
-
 " This is really useful when starting out with Vim to build up your muscle
-" memory.
+" memory
 " It's useless after you get it ingrained, but I like keeping it in here as a
-" testament of vim-fu.
+" testament of vim-fu
 noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
 
-" Have <Esc> work like it does in every other mode in terminal mode.
-tnoremap <Esc> <C-\><C-n>
-
 " Re-highlight the same area after indenting in visual mode
 vnoremap < <gv
 vnoremap > >gv
 
-" Underline search results.
+" Underline search results
 set hlsearch
 highlight Search cterm=underline ctermfg=NONE ctermbg=NONE
 
-" Turn on line numbers, but have them be relative to the current line.
-" This is a matter of taste.
+" Turn on relative line numbers
 set number
 set relativenumber
 
-" This creates a filled-in column at 80 columns, that's meant to help with PEP8
-" compliance and other things. I find it gets annoying with a transparent
-" background.
-" TODO: Turn this on conditionally if the background *isn't* transparent.
-"set colorcolumn=80
-"highlight ColorColumn ctermfg=NONE cterm=bold
-
-" Shows some characters specially, mostly tabs and trailing spaces.
+" Shows some characters specially, mostly tabs and trailing spaces
 set listchars=tab:>-,trail:·,extends:>,precedes:<
 set list
 highlight SpecialKey cterm=bold ctermfg=NONE ctermbg=NONE
 
 " Removes the annoying 'Do you want to read this file again?' prompt when
-" running an external command.
+" running an external command
 set autoread
 
-" Removes the really annoying 'smart' indent.
+" Removes the really annoying 'smart' indent
 set nosmartindent
 
-" Expand tabs into 4 spaces, like god wants.
+" Expand tabs into 4 spaces
 set expandtab
 set shiftwidth=4
 set softtabstop=4
@@ -208,60 +144,159 @@ set tw=79
 set nowrap
 set fo-=t
 
-" Prevents annoying clutter of backup/swap files
+" Store backup/swap files in dedicated directories
 let &backupdir=stdpath('config') . '/backup/'
 let &directory=stdpath('config') . '/swap/'
 
-" Allows mouse usage, I mostly use this with the scroll wheel rather than
-" clicking.
+" Allows mouse usage (e.g. the scroll wheel)
 set mouse=a
 
-" Writes undoable actions to a file. Useful for undoing a change even if you
-" exit vim.
+" Keep undo history even after exiting a file
 let &undodir=stdpath('config') . '/undo/'
 set undofile
 
 " Shows a command's effect as you type it
-set inccommand=nosplit
+set inccommand=split
 
+" Which characters to use to fill the statusline
 set fillchars+=stl:\ ,stlnc:\   
 
-" TODO: Instead of just not showing the preview window, close it once we do
-" choose a completion.
-"set completeopt-=preview
+" Show the color column specially
+highlight ColorColumn ctermfg=NONE cterm=bold
 
-" Plugin configuration.
+""""""""""""""""
+" AUTOCOMMANDS "
+""""""""""""""""
 
-" Use a new buffer for the plug updates window.
+augroup style
+    autocmd!
+
+    " Use 2-space wide indents in languages where it is convention
+    autocmd FileType lisp,clojure,haskell,yaml,dart
+        \ setlocal shiftwidth=2 softtabstop=2 tabstop=2
+
+    " Create a filled-in column at 80 columns
+    autocmd FileType python setl colorcolumn=80
+augroup END
+
+"""""""""""""""""""
+" PLUGIN SETTINGS "
+"""""""""""""""""""
+
+" Colorscheme (depends on the BASE16_COLORSCHEME environment varibale)
+set background=dark
+let base16colorspace=256
+execute ":colorscheme base16-" . $BASE16_COLORSCHEME
+
+"""""""""""
+" NEOMAKE "
+"""""""""""
+
+" Automatic syntax checking
+call neomake#configure#automake({
+\ 'TextChanged':  {},
+\ 'TextChangedI': {},
+\ 'InsertLeave':  {},
+\ 'BufWritePost': {'delay': 0},
+\ 'BufReadPost':  {},
+\ }, 500)
+
+let g:neomake_cpp_clang_args = ['-std=c++17', '-Wall', '-Wextra', '-Weffc++']
+let g:neomake_cpp_enabled_makers = ['clang', 'clangtidy', 'cppcheck']
+let g:neomake_c_clang_args = ['-std=c99', '-Wall', '-Wextra', '-Weffc++']
+let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.6/lib/libclang.so.1'
+let g:deoplete#sources#clang#clang_header = '/usr/include/clang'
+
+let g:neomake_python_enabled_makers = ['flake8']
+
+let g:neomake_sh_shellcheck_args = ['-fgcc']
+
+let g:deoplete#sources#rust#racer_binary=$HOME . '/.cargo/bin/racer'
+let g:deoplete#sources#rust#rust_source_path=$HOME . '/Applications/rust/src'
+
+"""""""""""
+" NEOTERM "
+"""""""""""
+
+" Have <Esc> work like it does in every other mode in terminal mode
+tnoremap <Esc> <C-\><C-n>
+
+" Have terminals be in the bottom right by default
+let g:neoterm_default_mod = 'botright'
+
+""""""""
+" PLUG "
+""""""""
+
 let g:plug_window = 'enew'
 
-let g:airline_theme = 'base16_paraiso'
+""""""""""""""""""""
+" AIRLINE/TMUXLINE "
+""""""""""""""""""""
 
 let g:airline_powerline_fonts = 0
 let g:tmuxline_powerline_separators = 0
-
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tmuxline#enabled = 0
+let g:tmuxline_theme = 'iceberg'
+let g:tmuxline_preset = 'tmux'
 
-" Neoterm
-let g:neoterm_default_mod = 'botright'
+""""""""""""""""
+" AUTOCOMMANDS "
+""""""""""""""""
 
-" Neomake
+augroup rust
+    autocmd!
 
-"" C++
-let g:neomake_cpp_clang_args = ['-std=c++17', '-Wall', '-Wextra', '-Weffc++']
-let g:neomake_cpp_enabled_makers = ['clang', 'clangtidy', 'cppcheck']
+    autocmd FileType rust setlocal nosmartindent
+    autocmd BufWritePre *.rs silent! RustFmt
+augroup END
 
-"" C
-let g:neomake_c_clang_args = ['-std=c99', '-Wall', '-Wextra', '-Weffc++']
+augroup haskell
+    autocmd!
 
-"" Python
-let g:neomake_python_python_exe = 'python3.6'
-let g:neomake_python_enabled_makers = ['flake8']
+    " Run tests with <Leader>t, assuming ghci is started in a terminal window
+    autocmd FileType haskell \
+        nnoremap <Leader>t :T :reload<CR>:T :main<CR>
+augroup END
 
-"" Shell
-let g:neomake_sh_shellcheck_args = ['-fgcc']
+function! SetRainbowParentheses()
+    autocmd BufEnter <buffer> RainbowParenthesesToggle
+    autocmd BufLeave <buffer> RainbowParenthesesToggle
+endfunction
 
-" Deoplete
+augroup rainbow
+    autocmd!
+
+    autocmd FileType rust,python,lisp,clojure,haskell call SetRainbowParentheses()
+augroup END
+
+" TODO: Can we use something like mustache? idk
+function! ReadTemplate(extension)
+    let template_path = stdpath('config') . '/templates/template.' . a:extension
+
+    if filereadable(template_path)
+        execute '0read' template_path
+
+        " Delete the last line left in the buffer, which is the empty line that
+        " gets added to a new file by vim
+        normal Gddggdd
+    endif
+endfunction
+
+augroup templates
+  autocmd!
+
+  " When creating a new file, a template will be read from ~/.config/nvim/templates,
+  " with the name format 'skeleton' + the extension of the current file
+  autocmd BufNewFile *.* call ReadTemplate(expand('<afile>:e'))
+augroup END
+
+""""""""""""
+" DEOPLETE "
+""""""""""""
+
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
 
@@ -269,22 +304,16 @@ if !exists('g:deoplete#omni#input_patterns')
   let g:deoplete#omni#input_patterns = {}
 endif
 
-"" C++
-let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.6/lib/libclang.so.1'
-let g:deoplete#sources#clang#clang_header = '/usr/include/clang'
+""""""""""""
+" STARTIFY "
+""""""""""""
 
-"" Rust
-let g:deoplete#sources#rust#racer_binary=$HOME . '/.cargo/bin/racer'
-let g:deoplete#sources#rust#rust_source_path=$HOME . '/Applications/rust/src'
-
-" Startify
 let g:startify_bookmarks = [ { 'C': '~/.config/nvim/init.vim' } ]
 
-" Seiya (transparent background)
-"let g:seiya_auto_enable=1
+""""""""""""""
+" LSP CLIENT "
+""""""""""""""
 
-" Language server
-" CTRL-F: language server, langserver
 set hidden
 let g:LanguageClient_serverCommands = {
     \ 'rust'   : ['rustup', 'run', 'nightly', 'rls'],
@@ -293,26 +322,31 @@ let g:LanguageClient_serverCommands = {
     \ 'haskell': ['hie-wrapper'],
 \ }
 
-" Cquery is special cause it requires a few custom settings.
-let cquery_cache_directory = stdpath('cache') . '/cquery'
-let cquery_log_file = '/tmp/cq.log'
-let cquery_server_command = ['cquery', '--log-file=' . cquery_log_file , '--init={"cacheDirectory":"' . cquery_cache_directory . '"}']
+let s:cquery_cache_directory = stdpath('cache') . '/cquery'
+let s:cquery_log_file = '/tmp/cq.log'
+let s:cquery_server_command = [
+    \ 'cquery', 
+    \ '--log-file=' . s:cquery_log_file ,
+    \ '--init={"cacheDirectory":"' . s:cquery_cache_directory . '"}'
+\ ]
+let g:LanguageClient_serverCommands['c'] = s:cquery_server_command
+let g:LanguageClient_serverCommands['cpp'] = s:cquery_server_command
 
-let g:LanguageClient_serverCommands['c'] = cquery_server_command
-let g:LanguageClient_serverCommands['cpp'] = cquery_server_command
-
-" XXX: Is this per-buffer?
+" Handle LanguageClient/NeoVim seamlessly
 function! HandleLanguageClientStarted()
     NeomakeDisableBuffer
-    nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-    nnoremap K :call LanguageClient#textDocument_hover()<CR>
-    nnoremap gd :call LanguageClient#textDocument_definition()<CR>
-    nnoremap <F2> :call LanguageClient#textDocument_rename()<CR>
+    nnoremap <buffer> <F5> :call LanguageClient_contextMenu()<CR>
+    nnoremap <buffer> K    :call LanguageClient#textDocument_hover()<CR>
+    nnoremap <buffer> gd   :call LanguageClient#textDocument_definition()<CR>
+    nnoremap <buffer> <F2> :call LanguageClient#textDocument_rename()<CR>
 endfunction
 
 function! HandleLanguageClientStopped()
     NeomakeEnableBuffer
-    " TODO: Restore the bindings we set in HandleLanguageClientStarted.
+    nunmap <buffer> <F5>
+    nunmap <buffer> K
+    nunmap <buffer> gd
+    nunmap <buffer> <F2>
 endfunction
 
 augroup LanguageClient_config
@@ -321,10 +355,8 @@ augroup LanguageClient_config
     autocmd User LanguageClientStopped call HandleLanguageClientStopped()
 augroup END
 
-" NERDTree
-map <C-n> :NERDTreeToggle<CR>
+""""""""""""
+" NERDTree "
+""""""""""""
 
-" TmuxLine
-let g:airline#extensions#tmuxline#enabled = 0
-let g:tmuxline_theme = 'iceberg'
-let g:tmuxline_preset = 'tmux'
+map <C-n> :NERDTreeToggle<CR>
