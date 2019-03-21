@@ -1,6 +1,6 @@
 # base16 builder
 BASE16_BUILDER_REPO="https://github.com/InspectorMustache/base16-builder-python.git"
-BASE16_DIR="$HOME/Applications/base16-builder/output"
+BASE16_DIR="$HOME/applications/base16-builder/output"
 
 export BASE16_COLORSCHEME=$(cat ~/.colorscheme)
 

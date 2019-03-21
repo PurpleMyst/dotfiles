@@ -15,6 +15,7 @@ Plug 'junegunn/vim-easy-align'
 
 " Git integration
 Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 
 " Easy parenthesis
 Plug 'tpope/vim-surround'
@@ -40,10 +41,19 @@ Plug 'chriskempson/base16-vim'
 " (NeoVim + tmux) status line
 Plug 'bling/vim-airline' | Plug 'edkolev/tmuxline.vim' | Plug 'vim-airline/vim-airline-themes'
 
-" Auto-Completion (Deoplete)
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Remote plugins
+Plug 'roxma/nvim-yarp'
+
+" Snippets
+Plug 'tomtom/tlib_vim'
+Plug 'marcweber/vim-addon-mw-utils'
+Plug 'garbas/vim-snipmate'
+
+" Auto-Completion
+Plug 'ncm2/ncm2'
+Plug 'ncm2/ncm2-snipmate'
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
-Plug 'junegunn/fzf', { 'dir': '~/Applications/fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': '~/applications/fzf', 'do': './install --all' }
 
 " Custom text objects
 Plug 'kana/vim-textobj-user'
@@ -168,6 +178,10 @@ highlight ColorColumn ctermfg=NONE cterm=bold
 " AUTOCOMMANDS "
 """"""""""""""""
 
+augroup completion
+    autocmd InsertLeave * pclose
+augroup END
+
 augroup style
     autocmd!
 
@@ -177,6 +191,21 @@ augroup style
 
     " Create a filled-in column at 80 columns
     autocmd FileType python setl colorcolumn=80
+augroup END
+
+augroup rust
+    autocmd!
+
+    autocmd FileType rust setlocal nosmartindent
+    autocmd BufWritePre *.rs silent! RustFmt
+augroup END
+
+augroup haskell
+    autocmd!
+
+    " Run tests with <Leader>t, assuming ghci is started in a terminal window
+    autocmd FileType haskell \
+        nnoremap <Leader>t :T :reload<CR>:T :main<CR>
 augroup END
 
 """""""""""""""""""
@@ -212,7 +241,7 @@ let g:neomake_python_enabled_makers = ['flake8']
 let g:neomake_sh_shellcheck_args = ['-fgcc']
 
 let g:deoplete#sources#rust#racer_binary=$HOME . '/.cargo/bin/racer'
-let g:deoplete#sources#rust#rust_source_path=$HOME . '/Applications/rust/src'
+let g:deoplete#sources#rust#rust_source_path=$HOME . '/applications/rust/src'
 
 """""""""""
 " NEOTERM "
@@ -242,28 +271,13 @@ let g:airline#extensions#tmuxline#enabled = 0
 let g:tmuxline_theme = 'iceberg'
 let g:tmuxline_preset = 'tmux'
 
-""""""""""""""""
-" AUTOCOMMANDS "
-""""""""""""""""
-
-augroup rust
-    autocmd!
-
-    autocmd FileType rust setlocal nosmartindent
-    autocmd BufWritePre *.rs silent! RustFmt
-augroup END
-
-augroup haskell
-    autocmd!
-
-    " Run tests with <Leader>t, assuming ghci is started in a terminal window
-    autocmd FileType haskell \
-        nnoremap <Leader>t :T :reload<CR>:T :main<CR>
-augroup END
+"""""""""""""""""""""""
+" RAINBOW PARENTHESES "
+"""""""""""""""""""""""
 
 function! SetRainbowParentheses()
-    autocmd BufEnter <buffer> RainbowParenthesesToggle
-    autocmd BufLeave <buffer> RainbowParenthesesToggle
+    autocmd BufEnter <buffer> RainbowParentheses
+    autocmd BufLeave <buffer> RainbowParentheses!
 endfunction
 
 augroup rainbow
@@ -272,43 +286,41 @@ augroup rainbow
     autocmd FileType rust,python,lisp,clojure,haskell call SetRainbowParentheses()
 augroup END
 
-" TODO: Can we use something like mustache? idk
-function! ReadTemplate(extension)
-    let template_path = stdpath('config') . '/templates/template.' . a:extension
-
-    if filereadable(template_path)
-        execute '0read' template_path
-
-        " Delete the last line left in the buffer, which is the empty line that
-        " gets added to a new file by vim
-        normal Gddggdd
-    endif
-endfunction
-
-augroup templates
-  autocmd!
-
-  " When creating a new file, a template will be read from ~/.config/nvim/templates,
-  " with the name format 'skeleton' + the extension of the current file
-  autocmd BufNewFile *.* call ReadTemplate(expand('<afile>:e'))
-augroup END
-
-""""""""""""
-" DEOPLETE "
-""""""""""""
-
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_ignore_case = 1
-
-if !exists('g:deoplete#omni#input_patterns')
-  let g:deoplete#omni#input_patterns = {}
-endif
-
 """"""""""""
 " STARTIFY "
 """"""""""""
 
-let g:startify_bookmarks = [ { 'C': '~/.config/nvim/init.vim' } ]
+let g:startify_custom_header = 'map(startify#fortune#boxed(), ''"  " . v:val'')'
+
+let g:startify_lists = [
+    \ { 'type': 'dir',       'header': ['   Directory'] },
+    \ { 'type': 'bookmarks', 'header': ['   Bookmarks'] },
+    \ { 'type': 'commands',  'header': ['   Commands'] },
+\ ]
+
+let g:startify_use_env = 1
+
+let g:startify_bookmarks = [
+    \ { 'C': '~/.config/nvim/init.vim' },
+    \ { 'Z': '~/.zshrc' },
+\ ]
+
+let g:startify_commands = [
+    \ { 'up' : ['Update plugins', 'PlugUpdate'] },
+    \ { 'uP' : ['Update plugin manager', 'PlugUpgrade'] },
+\ ]
+
+""""""""
+" NCM2 "
+""""""""
+
+set hidden
+set completeopt=noinsert,menuone,noselect,preview
+set shortmess+=c
+
+autocmd BufEnter * call ncm2#enable_for_buffer()
+
+inoremap <expr> <CR> (pumvisible() ? "\<C-y>\<CR>" : "\<CR>")
 
 """"""""""""""
 " LSP CLIENT "

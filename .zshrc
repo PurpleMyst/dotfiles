@@ -1,11 +1,11 @@
 # Path to your oh-my-zsh installation.
-  export ZSH=$HOME/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="awesomepanda"
+ZSH_THEME="oxide"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
@@ -52,6 +52,9 @@ test -f ~/.fzf.zsh  && source ~/.fzf.zsh
 
 # added by travis gem
 [ -f ~/.travis/travis.sh ] && source ~/.travis/travis.sh
+
+# OPAM
+test -f ~/.opam/opam-init/init.zsh && source ~/.opam/opam-init/init.zsh
 
 # weechat secure passphrase
 test -f ~/.weechat-passphrase.txt && export WEECHAT_PASSPHRASE=$(cat ~/.weechat-passphrase.txt)
