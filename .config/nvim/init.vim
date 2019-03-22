@@ -200,14 +200,6 @@ augroup rust
     autocmd BufWritePre *.rs silent! RustFmt
 augroup END
 
-augroup haskell
-    autocmd!
-
-    " Run tests with <Leader>t, assuming ghci is started in a terminal window
-    autocmd FileType haskell \
-        nnoremap <Leader>t :T :reload<CR>:T :main<CR>
-augroup END
-
 """""""""""""""""""
 " PLUGIN SETTINGS "
 """""""""""""""""""

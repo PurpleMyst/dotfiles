@@ -1,8 +1,7 @@
 export PYENV_ROOT="${PYENV_ROOT:=$HOME/.pyenv}"
 
 if [ -d "$PYENV_ROOT" ]; then
-    PYENV_GLOBALS=(`ls "$PYENV_ROOT/bin"`)
-    PYENV_GLOBALS+=(`ls "$PYENV_ROOT/shims"`)
+    PYENV_GLOBALS=(`find "$PYENV_ROOT/bin" "$PYENV_ROOT/shims" -type f -executable | xargs -n1 basename | sort -u`)
 
     load_pyenv() {
         unset -f $PYENV_GLOBALS
