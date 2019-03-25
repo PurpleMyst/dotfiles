@@ -4,7 +4,7 @@ BASE16_DIR="$HOME/applications/base16-builder/output"
 
 export BASE16_COLORSCHEME=$(cat ~/.colorscheme)
 
-_build_colorschemes() {
+build_colorschemes() {
     if ! [ -d $BASE16_DIR ]; then
         if ! [ -d $(dirname $BASE16_DIR) ]; then
             git clone -q $BASE16_BUILDER_REPO $(dirname $BASE16_DIR)

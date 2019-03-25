@@ -1,4 +1,4 @@
 ! vim: filetype=xdefaults
 
 ! Font
-*.font: xft:FiraCode:size=FONTSIZE,style=Regular,xft:Roboto Mono:size=FONTSIZE,style=Regular
+*.font: xft:MAINFONT:size=FONTSIZE,style=Regular

@@ -1,5 +1,5 @@
 #define FONTSIZE 11
-#define MAINFONT FiraCode
+#define MAINFONT Ubuntu Mono
 #define BROWSER firefox
 
 ! TODO: Replace a lot of stuff with #define.
