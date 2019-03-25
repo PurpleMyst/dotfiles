@@ -1,0 +1,206 @@
+###########
+# MOD KEY #
+###########
+
+set $mod Mod4
+
+##############
+# XRESOURCES #
+##############
+
+set_from_resource $foreground  i3wm.foreground  #000000
+set_from_resource $background  i3wm.background  #000000
+set_from_resource $cursorColor i3wm.cursorColor #000000
+set_from_resource $color0      i3wm.color0      #000000
+set_from_resource $color1      i3wm.color1      #000000
+set_from_resource $color2      i3wm.color2      #000000
+set_from_resource $color3      i3wm.color3      #000000
+set_from_resource $color4      i3wm.color4      #000000
+set_from_resource $color5      i3wm.color5      #000000
+set_from_resource $color6      i3wm.color6      #000000
+set_from_resource $color7      i3wm.color7      #000000
+set_from_resource $color8      i3wm.color8      #000000
+set_from_resource $color9      i3wm.color9      #000000
+set_from_resource $color10     i3wm.color10     #000000
+set_from_resource $color11     i3wm.color11     #000000
+set_from_resource $color12     i3wm.color12     #000000
+set_from_resource $color13     i3wm.color13     #000000
+set_from_resource $color14     i3wm.color14     #000000
+set_from_resource $color15     i3wm.color15     #000000
+set_from_resource $color16     i3wm.color16     #000000
+set_from_resource $color17     i3wm.color17     #000000
+set_from_resource $color18     i3wm.color18     #000000
+set_from_resource $color19     i3wm.color19     #000000
+set_from_resource $color20     i3wm.color20     #000000
+set_from_resource $color21     i3wm.color21     #000000
+
+set_from_resource $fontName    i3wm.fontName    Ubuntu Mono
+set_from_resource $fontSize    i3wm.fontSize    11
+
+##############
+# APPEARANCE #
+##############
+
+font pango:$fontName $fontSize
+
+#                       border  bg      text    indicator
+client.focused          $color12 $color12 $foreground $background
+client.focused_inactive $color12 $color12 $foreground $background
+client.unfocused        $color0  $color0  $color8     $color13
+client.urgent           $color1  $color1  $background $color13
+
+################
+# APPLICATIONS #
+################
+
+exec --no-startup-id "redshift-gtk -l41.9028:12.4964"
+
+###################
+# CUSTOM KEYBINDS #
+###################
+
+bindsym Control+$mod+l exec ~/.config/i3/lock
+
+####################
+# DEFAULT KEYBINDS #
+####################
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec urxvt
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+# start rofi
+bindsym $mod+d exec rofi -show run
+
+# change focus
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+j move left
+bindsym $mod+Shift+k move down
+bindsym $mod+Shift+l move up
+bindsym $mod+Shift+ograve move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal/vertical orientation
+bindsym $mod+h split h
+bindsym $mod+v split v
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+##############
+# WORKSPACES #
+##############
+
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1  "1 chat"
+set $ws2  "2 surf"
+set $ws3  "3 code"
+set $ws4  "4 term"
+set $ws5  "5 music"
+set $ws6  "6 game"
+set $ws7  "7 work"
+set $ws8  "8 ????"
+set $ws9  "9 ????"
+set $ws10 "10 ????"
+
+# switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+###############
+# RESIZE MODE #
+###############
+
+mode "resize" {
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+        bindsym $mod+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+##############
+# STATUS BAR #
+##############
+
+bar {
+    colors {
+            separator  $background
+            background $background
+            statusline $foreground
+
+            #                  border      bg          text
+            focused_workspace  $color2     $color2     $background
+            active_workspace   $color2     $color2     $foreground
+            inactive_workspace $background $background $color8
+            urgent_workspace   $foreground $foreground $color1
+    }
+
+    status_command ~/.config/i3/status
+
+    workspace_buttons yes
+
+    position top
+}

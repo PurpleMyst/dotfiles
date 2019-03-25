@@ -1,0 +1,109 @@
+#!/usr/bin/env python3
+import copy
+import os
+import re
+
+import i3pystatus
+import yaml
+
+###################
+# DEPENDENCIES    #
+# - basiciw       #
+# - i3pystatus    #
+# - libpulseaudio #
+# - netifaces     #
+# - pyyaml        #
+###################
+
+##########
+# COLORS #
+##########
+
+# FIXME: Load colors from Xresources/shell
+GREEN = "#00FF00"
+RED = "#FF0000"
+YELLOW = "#FFFF00"
+
+##########
+# HEADER #
+##########
+
+DEFAULT_HINTS = {"separator": False}
+
+
+def hints(new_hints=None):
+    result = copy.deepcopy(DEFAULT_HINTS)
+    result.update(new_hints or {})
+    return result
+
+status = i3pystatus.Status(standalone=True)
+
+#########
+# CLOCK #
+#########
+
+status.register("clock", format="%d-%m-%Y %H:%M:%S", hints=hints())
+
+#######
+# CPU #
+#######
+
+status.register("load", format="{avg1}", hints=hints())
+status.register("temp", format="CPU {temp:.0f}°C", hints=hints())
+
+###########
+# BATTERY #
+###########
+
+status.register(
+    "battery",
+    format="BAT {status}{percentage:.2f}%",
+    alert=True,
+    alert_percentage=5,
+    full_color=GREEN,
+    charging_color=YELLOW,
+    critical_color=RED,
+    status={
+        "DIS": "↓",
+        "CHR": "↑",
+        "FULL": "",
+    },
+    hints=hints(),
+)
+
+############
+# INTERNET #
+############
+
+status.register(
+    "network",
+    interface="wlp3s0",
+    format_up="Wi-Fi {quality:03.0f}%",
+    format_down="Wi-Fi DOWN!!!",
+    color_up=GREEN,
+    color_down=RED,
+    hints=hints(),
+)
+
+########
+# DISK #
+########
+
+status.register(
+    "disk",
+    path="/",
+    # format="{used}/{total}G [{avail}G]",)
+    format="{avail}G avail.",
+    hints=hints(),
+)
+
+#########
+# AUDIO #
+#########
+status.register("pulseaudio", format="VOL {volume}", hints=hints())
+
+##########
+# FOOTER #
+##########
+
+status.run()
