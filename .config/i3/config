@@ -49,6 +49,8 @@ client.focused_inactive $color12 $color12 $foreground $background
 client.unfocused        $color0  $color0  $color8     $color13
 client.urgent           $color1  $color1  $background $color13
 
+for_window [class="^.*"] border pixel 1
+
 ################
 # APPLICATIONS #
 ################
