@@ -63,6 +63,9 @@ Plug 'glts/vim-textobj-comment'
 " NERDTree
 Plug 'scrooloose/nerdtree'
 
+" Real colors
+Plug 'RRethy/vim-hexokinase'
+
 " Syntax plugins
 Plug 'PotatoesMaster/i3-vim-syntax'
 Plug 'cespare/vim-toml'
@@ -76,6 +79,7 @@ Plug 'dart-lang/dart-vim-plugin'
 Plug 'elixir-editors/vim-elixir'
 Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
 Plug 'ziglang/zig.vim'
+Plug 'mxw/vim-jsx'
 Plug 'AndrewRadev/splitjoin.vim'
 
 " Rainbow parenthesis
@@ -174,6 +178,10 @@ set fillchars+=stl:\ ,stlnc:\
 " Show the color column specially
 highlight ColorColumn ctermfg=NONE cterm=bold
 
+if $TERM !~ "rxvt"
+    set termguicolors
+endif
+
 """"""""""""""""
 " AUTOCOMMANDS "
 """"""""""""""""
@@ -186,11 +194,11 @@ augroup style
     autocmd!
 
     " Use 2-space wide indents in languages where it is convention
-    autocmd FileType lisp,clojure,haskell,yaml,dart
+    autocmd FileType lisp,clojure,haskell,yaml,dart,javascript.jsx
         \ setlocal shiftwidth=2 softtabstop=2 tabstop=2
 
-    " Create a filled-in column at 80 columns
-    autocmd FileType python setl colorcolumn=80
+    " Create a filled-in column at 88 columns
+    autocmd FileType python setl colorcolumn=88
 augroup END
 
 augroup rust
@@ -200,14 +208,37 @@ augroup rust
     autocmd BufWritePre *.rs silent! RustFmt
 augroup END
 
-"""""""""""""""""""
-" PLUGIN SETTINGS "
-"""""""""""""""""""
+function! s:mtime(filename)
+    return system('stat -c %Y ' . shellescape(a:filename))
+endfunction
 
-" Colorscheme (depends on the BASE16_COLORSCHEME environment varibale)
+function! s:HandleSwapExists()
+    if s:mtime(v:swapname) > s:mtime(expand("<afile>")) 
+        let v:swapchoice='r'
+        echom 'Restored ' . expand("<afile>") . ' from swap file'
+    else
+        let v:swapchoice='d'
+        echom 'Deleted swap file for ' . expand("<afile>")
+    endif
+endfunction
+
+augroup swapexists
+    autocmd!
+
+    autocmd SwapExists * call s:HandleSwapExists()
+augroup END
+
+"""""""""""""""
+" COLORSCHEME "
+"""""""""""""""
+
 set background=dark
 let base16colorspace=256
 execute ":colorscheme base16-" . $BASE16_COLORSCHEME
+
+"""""""""""""""""""
+" PLUGIN SETTINGS "
+"""""""""""""""""""
 
 """""""""""
 " NEOMAKE "
@@ -336,7 +367,7 @@ let s:cquery_server_command = [
 let g:LanguageClient_serverCommands['c'] = s:cquery_server_command
 let g:LanguageClient_serverCommands['cpp'] = s:cquery_server_command
 
-" Handle LanguageClient/NeoVim seamlessly
+" Automatically disable Neomake in buffers where the language client works
 function! HandleLanguageClientStarted()
     NeomakeDisableBuffer
     nnoremap <buffer> <F5> :call LanguageClient_contextMenu()<CR>
@@ -345,18 +376,9 @@ function! HandleLanguageClientStarted()
     nnoremap <buffer> <F2> :call LanguageClient#textDocument_rename()<CR>
 endfunction
 
-function! HandleLanguageClientStopped()
-    NeomakeEnableBuffer
-    nunmap <buffer> <F5>
-    nunmap <buffer> K
-    nunmap <buffer> gd
-    nunmap <buffer> <F2>
-endfunction
-
 augroup LanguageClient_config
     autocmd!
-    autocmd User LanguageClientStarted call HandleLanguageClientStarted()
-    autocmd User LanguageClientStopped call HandleLanguageClientStopped()
+    autocmd User LanguageClientTextDocumentDidOpenPost call HandleLanguageClientStarted()
 augroup END
 
 """"""""""""
@@ -364,3 +386,9 @@ augroup END
 """"""""""""
 
 map <C-n> :NERDTreeToggle<CR>
+
+""""""""""""""
+" HEXOKINASE "
+""""""""""""""
+
+let g:Hexokinase_ftAutoload = ["css", "javascript.jsx"]

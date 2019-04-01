@@ -40,6 +40,9 @@ function safe-source() {
 # GhcUp
 safe-source ~/.ghcup/env
 
+# poetry
+safe-source ~/.poetry/env
+
 # OPAM
 safe-source ~/.opam/opam-init/init.zsh
 

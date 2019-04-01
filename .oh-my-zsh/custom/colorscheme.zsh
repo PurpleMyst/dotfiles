@@ -28,9 +28,20 @@ set_colorscheme() {
     # set x colors
     BASE16_XRESOURCES=$BASE16_DIR/xresources/xresources/base16-$BASE16_COLORSCHEME-256.Xresources
     if [ -f $BASE16_XRESOURCES ]; then
-        test -f ~/.Xresources.d/colorscheme && unlink ~/.Xresources.d/colorscheme
-        ln $BASE16_DIR/xresources/xresources/base16-$BASE16_COLORSCHEME-256.Xresources ~/.Xresources.d/colorscheme
-        which xrdb > /dev/null && xrdb ~/.Xresources
+        if [ -f ~/.Xresources.d/colorscheme ]; then
+            unlink ~/.Xresources.d/colorscheme
+        fi
+
+        ln $BASE16_XRESOURCES ~/.Xresources.d/colorscheme
+
+        if which xrdb > /dev/null; then
+            xrdb ~/.Xresources
+        fi
+    fi
+
+    # reload i3 colors
+    if pgrep -c '^i3$' > /dev/null; then
+        i3 reload > /dev/null
     fi
 
     # set shell colors
