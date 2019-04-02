@@ -43,11 +43,11 @@ set_from_resource $fontSize    i3wm.fontSize    11
 
 font pango:$fontName $fontSize
 
-#                       border  bg      text    indicator
-client.focused          $color12 $color12 $foreground $background
-client.focused_inactive $color12 $color12 $foreground $background
-client.unfocused        $color0  $color0  $color8     $color13
-client.urgent           $color1  $color1  $background $color13
+#                       border  bg      text        indicator
+client.focused          $color8 $color8 $foreground $background
+client.focused_inactive $color8 $color8 $foreground $background
+client.unfocused        $color0 $color0 $color8     $color13
+client.urgent           $color1 $color0 $color8     $color13
 
 for_window [class="^.*"] border pixel 1
 
@@ -56,6 +56,7 @@ for_window [class="^.*"] border pixel 1
 ################
 
 exec --no-startup-id "redshift-gtk -l41.9028:12.4964"
+exec --no-startup-id "compton -b"
 
 ###################
 # CUSTOM KEYBINDS #
@@ -197,7 +198,7 @@ bar {
             focused_workspace  $color2     $color2     $background
             active_workspace   $color2     $color2     $foreground
             inactive_workspace $background $background $color8
-            urgent_workspace   $foreground $foreground $color1
+            urgent_workspace   $color1     $background $color8
     }
 
     status_command ~/.config/i3/status

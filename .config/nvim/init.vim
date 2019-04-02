@@ -38,6 +38,9 @@ Plug 'mhinz/vim-startify'
 " Colorscheme
 Plug 'chriskempson/base16-vim'
 
+" Transparent background
+Plug 'miyakogi/seiya.vim'
+
 " (NeoVim + tmux) status line
 Plug 'bling/vim-airline' | Plug 'edkolev/tmuxline.vim' | Plug 'vim-airline/vim-airline-themes'
 
@@ -391,4 +394,11 @@ map <C-n> :NERDTreeToggle<CR>
 " HEXOKINASE "
 """"""""""""""
 
-let g:Hexokinase_ftAutoload = ["css", "javascript.jsx"]
+let g:Hexokinase_ftAutoload = ["css", "javascript.jsx", "xdefaults"]
+
+"""""""""
+" SEIYA "
+"""""""""
+
+let g:seiya_auto_enable=1
+let g:seiya_target_groups = &termguicolors ? ['guibg'] : ['ctermbg']
