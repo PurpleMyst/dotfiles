@@ -51,12 +51,17 @@ client.urgent           $color1 $color0 $color8     $color13
 
 for_window [class="^.*"] border pixel 1
 
+gaps inner 8
+smart_gaps inverse_outer
+smart_borders on
+
 ################
 # APPLICATIONS #
 ################
 
 exec --no-startup-id "redshift-gtk -l41.9028:12.4964"
-exec --no-startup-id "compton -b"
+#exec --no-startup-id "compton -b"
+exec --no-startup-id "feh --bg-scale ~/.wallpaper"
 
 ###################
 # CUSTOM KEYBINDS #

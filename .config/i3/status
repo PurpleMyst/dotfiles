@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-import copy
-import os
-import re
-
 import i3pystatus
-import yaml
 
 ###################
 # DEPENDENCIES    #
@@ -32,9 +27,10 @@ DEFAULT_HINTS = {"separator": False}
 
 
 def hints(new_hints=None):
-    result = copy.deepcopy(DEFAULT_HINTS)
+    result = DEFAULT_HINTS.copy()
     result.update(new_hints or {})
     return result
+
 
 status = i3pystatus.Status(standalone=True)
 

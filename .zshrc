@@ -49,6 +49,9 @@ safe-source ~/.opam/opam-init/init.zsh
 # fzf
 safe-source ~/.fzf.zsh
 
+# sccache
+which sccache > /dev/null && export RUSTC_WRAPPER=$(which sccache)
+
 # weechat secure passphrase
 test -f ~/.weechat-passphrase.txt && export WEECHAT_PASSPHRASE=$(cat ~/.weechat-passphrase.txt)
 

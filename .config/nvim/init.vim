@@ -400,5 +400,5 @@ let g:Hexokinase_ftAutoload = ["css", "javascript.jsx", "xdefaults"]
 " SEIYA "
 """""""""
 
-let g:seiya_auto_enable=1
+let g:seiya_auto_enable=exists('$TMUX')
 let g:seiya_target_groups = &termguicolors ? ['guibg'] : ['ctermbg']
