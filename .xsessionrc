@@ -1,0 +1,6 @@
+# vim: ft=zsh
+
+# Preferred applications
+export EDITOR='nvim'
+export BROWSER='firefox'
+export TERMINAL='urxvt'

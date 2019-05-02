@@ -1,3 +1,5 @@
+let g:python3_host_prog="/usr/bin/python3"
+
 """""""""""
 " PLUGINS "
 """""""""""
@@ -109,6 +111,9 @@ filetype indent off
 
 " Enable syntax highlighting
 syntax on
+
+" Don't redraw during macros
+set lazyredraw
 
 " Enable syntax folding (<3 FastFold)
 set foldmethod=syntax
@@ -296,6 +301,13 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tmuxline#enabled = 0
 let g:tmuxline_theme = 'iceberg'
 let g:tmuxline_preset = 'tmux'
+
+"let g:airline_section_a = airline#section#create([])
+"let g:airline_section_b = airline#section#create([])
+"let g:airline_section_c = airline#section#create([])
+"let g:airline_section_x = airline#section#create([])
+"let g:airline_section_y = airline#section#create([])
+"let g:airline_section_z = airline#section#create([])
 
 """""""""""""""""""""""
 " RAINBOW PARENTHESES "

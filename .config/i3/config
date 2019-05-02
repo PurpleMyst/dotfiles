@@ -83,7 +83,7 @@ bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Shift+q kill
 
 # start rofi
-bindsym $mod+d exec rofi -show run
+bindsym $mod+d exec rofi -show run -matching fuzzy
 
 # change focus
 bindsym $mod+Left focus left
