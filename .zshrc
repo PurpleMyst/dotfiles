@@ -29,3 +29,6 @@ source $ZSH/oh-my-zsh.sh
 if [ -f ~/.ls_colors ]; then
     eval $(dircolors -b ~/.ls_colors)
 fi
+
+# fzf
+safe-source ~/.fzf.zsh

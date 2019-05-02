@@ -24,9 +24,6 @@ function safe-source() {
     # OPAM
     safe-source ~/.opam/opam-init/init.zsh
 
-    # fzf
-    safe-source ~/.fzf.zsh
-
 # sccache
 if [ -x "$(command -v sccache)" ]; then
     export RUSTC_WRAPPER=$(which sccache)
