@@ -33,3 +33,6 @@ fi
 if [ -f ~/.weechat-passphrase.txt ]; then
     export WEECHAT_PASSPHRASE=$(cat ~/.weechat-passphrase.txt)
 fi
+
+# devkitpro
+safe-source /etc/profile.d/devkit-env.sh
