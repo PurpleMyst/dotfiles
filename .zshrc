@@ -14,6 +14,10 @@ COMPLETION_WAITING_DOTS="true"
 # Oh-My-ZSH plugins to load
 plugins=(colored-man-pages)
 
+if [ -x "$(command -v git)" ]; then
+    plugins+=git
+fi
+
 if [ -x "$(command -v tmux)" ]; then
     plugins+=tmux
 fi
