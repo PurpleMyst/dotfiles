@@ -55,9 +55,13 @@ Plug 'marcweber/vim-addon-mw-utils'
 Plug 'garbas/vim-snipmate'
 
 " Auto-Completion
-Plug 'ncm2/ncm2'
-Plug 'ncm2/ncm2-snipmate'
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
+"Plug 'ncm2/ncm2'
+"Plug 'ncm2/ncm2-snipmate'
+"Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
+Plug 'neoclide/coc.nvim', {'do': 'zsh install.sh nightly'}
+
+
+" Fuzzy finder
 Plug 'junegunn/fzf', { 'dir': '~/applications/fzf', 'do': './install --all' }
 
 " Custom text objects
@@ -348,17 +352,17 @@ let g:startify_commands = [
     \ { 'uP' : ['Update plugin manager', 'PlugUpgrade'] },
 \ ]
 
-""""""""
-" NCM2 "
-""""""""
+"""""""
+" COC "
+"""""""
 
 set hidden
+"set cmdheight=2
 set completeopt=noinsert,menuone,noselect,preview
 set shortmess+=c
+set signcolumn=yes
 
-autocmd BufEnter * call ncm2#enable_for_buffer()
-
-inoremap <expr> <CR> (pumvisible() ? "\<C-y>\<CR>" : "\<CR>")
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 """"""""""""""
 " LSP CLIENT "
