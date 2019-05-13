@@ -2,6 +2,8 @@ function safe-source() {
     test -f $1 && source $1
 }
 
+export NVM_DIR="${NVM_DIR:=$HOME/.nvm}"
+
 # $PATH
     # System locations
     export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:"
@@ -15,6 +17,9 @@ function safe-source() {
     # Cargo
     export PATH="$HOME/.cargo/bin:$PATH"
 
+    # LuaRocks
+    export PATH="$HOME/.luarocks/bin:$PATH"
+
     # GhcUp
     safe-source ~/.ghcup/env
 
@@ -23,6 +28,8 @@ function safe-source() {
 
     # OPAM
     safe-source ~/.opam/opam-init/init.zsh
+
+    [[ ! $- =~ i ]] && safe-source $NVM_DIR/nvm.sh
 
 # sccache
 if [ -x "$(command -v sccache)" ]; then
