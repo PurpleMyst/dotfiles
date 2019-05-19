@@ -357,12 +357,13 @@ let g:startify_commands = [
 """""""
 
 set hidden
-"set cmdheight=2
 set completeopt=noinsert,menuone,noselect,preview
 set shortmess+=c
 set signcolumn=yes
 
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+autocmd User CocJumpPlaceHolder call CocActionAsync('showSignatureHelp')
 
 """"""""""""""
 " LSP CLIENT "
@@ -418,3 +419,5 @@ let g:Hexokinase_ftAutoload = ["css", "javascript.jsx", "xdefaults"]
 
 let g:seiya_auto_enable=exists('$TMUX')
 let g:seiya_target_groups = &termguicolors ? ['guibg'] : ['ctermbg']
+
+let g:rust_fold=1

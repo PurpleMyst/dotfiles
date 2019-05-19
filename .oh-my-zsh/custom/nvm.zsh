@@ -10,6 +10,7 @@ if [ -d "$NVM_DIR" ]; then
     load_nvm() {
         unset -f $NODE_GLOBALS
         test -f "$NVM_DIR/nvm.sh"  && source "$NVM_DIR/nvm.sh"
+        unset -f load_nvm
     }
 
     for cmd in "${NODE_GLOBALS[@]}"; do

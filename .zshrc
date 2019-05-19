@@ -38,3 +38,5 @@ fi
 safe-source ~/.fzf.zsh
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+alias nvim='[[ -n $(command -v load_nvm) ]] && load_nvm; nvim'
