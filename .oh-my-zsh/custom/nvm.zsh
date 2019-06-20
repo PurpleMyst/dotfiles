@@ -1,9 +1,9 @@
-if [ -d "$NVM_DIR" ]; then
+if [ -d "$NVM_DIR" -a -f "$NVM_DIR/nvm.sh" ]; then
     __NVM_SHIMS=()
 
     __load_nvm() {
         unset -f "${__NVM_SHIMS[@]}"
-        test -f "$NVM_DIR/nvm.sh" && source "$NVM_DIR/nvm.sh"
+        source "$NVM_DIR/nvm.sh"
         unset -f __load_nvm
     }
 
