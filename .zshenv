@@ -22,6 +22,9 @@ export PYENV_ROOT="${PYENV_ROOT:=$HOME/.pyenv}"
     # LuaRocks
     export PATH="$HOME/.luarocks/bin:$PATH"
 
+    # Yarn
+    export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
     # GhcUp
     safe-source ~/.ghcup/env
 
