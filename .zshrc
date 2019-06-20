@@ -37,5 +37,5 @@ fi
 # fzf
 safe-source ~/.fzf.zsh
 
-
-alias nvim='[[ -n $(command -v load_nvm) ]] && load_nvm; nvim'
+# venv
+safe-source .venv/bin/activate

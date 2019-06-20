@@ -48,3 +48,8 @@ fi
 
 # devkitpro
 safe-source /etc/profile.d/devkit-env.sh
+
+# venv
+if [[ -n $VIRTUAL_ENV && -e $VIRTUAL_ENV/bin/activate ]]; then
+  source "$VIRTUAL_ENV/bin/activate"
+fi
