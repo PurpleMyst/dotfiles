@@ -1,0 +1,17 @@
+{
+    "languageserver": {
+        "cquery": {
+            "command": "cquery",
+            "args": ["--log-file=/tmp/cq.log"],
+            "filetypes": ["c", "cpp"],
+            "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+            "initializationOptions": {
+                "cacheDirectory": "/tmp/cquery"
+            }
+        }
+    },
+    "python.linting.pylintEnabled": false,
+    "python.linting.mypyEnabled": true,
+    "python.linting.flake8Args": ["--max-line-length=120"],
+    "tsserver.enableJavascript": false
+}
