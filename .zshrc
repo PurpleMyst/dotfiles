@@ -20,6 +20,17 @@ fi
 
 if [ -x "$(command -v tmux)" ]; then
     plugins+=(tmux)
+
+    tn() {
+        local session
+        if [ $# = 0 ]; then
+            session=$(basename $(pwd))
+        else
+            session=$(basename $1)
+        fi
+
+        tmux attach -t "$session" || tmux new -s "$session" "$@"
+    }
 fi
 
 if [ -e "$ZSH/custom/plugins/zsh-syntax-highlighting" ]; then
