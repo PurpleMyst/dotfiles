@@ -14,6 +14,9 @@ if [ -d "$NVM_DIR" ]; then
 
     __create_nvm_shim nvm
 
+    # for coc.nvim
+    __create_nvm_shim nvim
+
     if [ -d "$NVM_DIR/versions/node" ]; then
         find "$NVM_DIR/versions/node/" -maxdepth 3 -type f,l -path '*/bin/*' -exec basename {} \; \
         | sort -u \
