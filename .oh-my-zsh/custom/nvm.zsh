@@ -1,19 +1,22 @@
-export NVM_DIR="${NVM_DIR:=$HOME/.nvm}"
-
 if [ -d "$NVM_DIR" ]; then
-    NODE_GLOBALS=(node nvm)
+    __NVM_SHIMS=()
 
-    if [ -d "$NVM_DIR/versions/node" ]; then
-        NODE_GLOBALS+=(`find $NVM_DIR/versions/node/ -maxdepth 3 -type l -wholename '*/bin/*' | xargs -n1 basename | sort -u`)
-    fi
-
-    load_nvm() {
-        unset -f $NODE_GLOBALS
-        test -f "$NVM_DIR/nvm.sh"  && source "$NVM_DIR/nvm.sh"
-        unset -f load_nvm
+    __load_nvm() {
+        unset -f "${__NVM_SHIMS[@]}"
+        test -f "$NVM_DIR/nvm.sh" && source "$NVM_DIR/nvm.sh"
+        unset -f __load_nvm
     }
 
-    for cmd in "${NODE_GLOBALS[@]}"; do
-        eval "$cmd() { load_nvm; $cmd \$@ }"
-    done
+    __create_nvm_shim() {
+        __NVM_SHIMS+=("$1")
+        eval "$1() { __load_nvm; $1 \"\$@\" }"
+    }
+
+    __create_nvm_shim nvm
+
+    if [ -d "$NVM_DIR/versions/node" ]; then
+        find "$NVM_DIR/versions/node/" -maxdepth 3 -type f,l -path '*/bin/*' -exec basename {} \; \
+        | sort -u \
+        | while read -r name; do __create_nvm_shim "$name"; done
+    fi
 fi

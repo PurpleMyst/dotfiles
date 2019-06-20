@@ -2,7 +2,9 @@ function safe-source() {
     test -f $1 && source $1
 }
 
+# version managers
 export NVM_DIR="${NVM_DIR:=$HOME/.nvm}"
+export PYENV_ROOT="${PYENV_ROOT:=$HOME/.pyenv}"
 
 # $PATH
     # System locations

@@ -1,21 +1,22 @@
-export PYENV_ROOT="${PYENV_ROOT:=$HOME/.pyenv}"
-
 if [ -d "$PYENV_ROOT" ]; then
-    PYENV_GLOBALS=()
+    __PYENV_SHIMS=()
 
-    PYENV_GLOBALS_FULLPATH=$(find "$PYENV_ROOT/bin" "$PYENV_ROOT/shims" -type f -executable)
-    if [ -n "$PYENV_GLOBALS_FULLPATH" ]; then
-        PYENV_GLOBALS+=($(echo "$PYENV_GLOBALS_FULLPATH" | xargs -n1 basename | sort -u))
-    fi
+    __load_pyenv() {
+        unset -f "${__PYENV_SHIMS[@]}"
 
-    load_pyenv() {
-        unset -f $PYENV_GLOBALS
         export PATH="$PYENV_ROOT/bin:$PATH"
         eval "$(pyenv init -)"
         eval "$(pyenv virtualenv-init -)"
     }
 
-    for cmd in "${PYENV_GLOBALS[@]}"; do
-        eval "$cmd() { load_pyenv; $cmd \$@ }"
-    done
+    __create_pyenv_shim() {
+        __PYENV_SHIMS+=("$1")
+        eval "$1() { load_pyenv; $1 \"\$@\" }"
+    }
+
+    if [ -d "$PYENV_ROOT/bin" ]; then
+        find "$PYENV_ROOT"/{bin,shims} -type f -executable -exec basename {} \; \
+        | sort -u \
+        | while read -r name; do __create_pyenv_shim "$name"; done
+    fi
 fi
