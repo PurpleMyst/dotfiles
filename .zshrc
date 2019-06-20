@@ -15,23 +15,23 @@ COMPLETION_WAITING_DOTS="true"
 plugins=(colored-man-pages)
 
 if [ -x "$(command -v git)" ]; then
-    plugins+=git
+    plugins+=(git)
 fi
 
 if [ -x "$(command -v tmux)" ]; then
-    plugins+=tmux
+    plugins+=(tmux)
 fi
 
 if [ -e "$ZSH/custom/plugins/zsh-syntax-highlighting" ]; then
-    plugins+=zsh-syntax-highlighting
+    plugins+=(zsh-syntax-highlighting)
 fi
 
 # Oh-My-ZSH environment
-source $ZSH/oh-my-zsh.sh
+source "$ZSH/oh-my-zsh.sh"
 
 # ls colors
 if [ -f ~/.ls_colors ]; then
-    eval $(dircolors -b ~/.ls_colors)
+    eval "$(dircolors -b ~/.ls_colors)"
 fi
 
 # fzf
