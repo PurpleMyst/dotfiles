@@ -1,4 +1,5 @@
 let g:python3_host_prog="/usr/bin/python3"
+set pyxversion=3
 
 """""""""""
 " PLUGINS "
@@ -55,11 +56,9 @@ Plug 'marcweber/vim-addon-mw-utils'
 Plug 'garbas/vim-snipmate'
 
 " Auto-Completion
-"Plug 'ncm2/ncm2'
-"Plug 'ncm2/ncm2-snipmate'
-"Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
-Plug 'neoclide/coc.nvim', {'do': 'zsh install.sh nightly'}
-
+Plug 'neoclide/coc.nvim', { 'do': 'zsh install.sh nightly' }
+Plug 'neoclide/coc-tsserver', { 'do': 'yarn install --frozen-lockfile' }
+Plug 'neoclide/coc-tslint-plugin', { 'do': 'yarn install --frozen-lockfile' }
 
 " Fuzzy finder
 Plug 'junegunn/fzf', { 'dir': '~/applications/fzf', 'do': './install --all' }
@@ -98,7 +97,7 @@ Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'easymotion/vim-easymotion'
 
 " Better folding
-Plug 'Konfekt/FastFold'
+"Plug 'Konfekt/FastFold'
 
 " Measure startup time
 Plug 'tweekmonster/startuptime.vim'
@@ -206,7 +205,7 @@ augroup style
     autocmd!
 
     " Use 2-space wide indents in languages where it is convention
-    autocmd FileType lisp,clojure,haskell,yaml,dart,javascript.jsx
+    autocmd FileType lisp,clojure,haskell,yaml,dart,javascript.jsx,typescript,json
         \ setlocal shiftwidth=2 softtabstop=2 tabstop=2
 
     " Create a filled-in column at 88 columns
@@ -225,7 +224,7 @@ function! s:mtime(filename)
 endfunction
 
 function! s:HandleSwapExists()
-    if s:mtime(v:swapname) > s:mtime(expand("<afile>")) 
+    if s:mtime(v:swapname) > s:mtime(expand("<afile>"))
         let v:swapchoice='r'
         echom 'Restored ' . expand("<afile>") . ' from swap file'
     else
@@ -360,46 +359,43 @@ set hidden
 set completeopt=noinsert,menuone,noselect,preview
 set shortmess+=c
 set signcolumn=yes
+set updatetime=300
+
+set statusline^=%{coc#status()}
 
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-autocmd User CocJumpPlaceHolder call CocActionAsync('showSignatureHelp')
-
-""""""""""""""
-" LSP CLIENT "
-""""""""""""""
-
-set hidden
-let g:LanguageClient_serverCommands = {
-    \ 'rust'   : ['rustup', 'run', 'nightly', 'rls'],
-    \ 'python' : ['python3', '-m', 'pyls'],
-    \ 'lua'    : ['lua-lsp'],
-    \ 'haskell': ['hie-wrapper'],
-\ }
-
-let s:cquery_cache_directory = stdpath('cache') . '/cquery'
-let s:cquery_log_file = '/tmp/cq.log'
-let s:cquery_server_command = [
-    \ 'cquery', 
-    \ '--log-file=' . s:cquery_log_file ,
-    \ '--init={"cacheDirectory":"' . s:cquery_cache_directory . '"}'
-\ ]
-let g:LanguageClient_serverCommands['c'] = s:cquery_server_command
-let g:LanguageClient_serverCommands['cpp'] = s:cquery_server_command
-
-" Automatically disable Neomake in buffers where the language client works
-function! HandleLanguageClientStarted()
-    NeomakeDisableBuffer
-    nnoremap <buffer> <F5> :call LanguageClient_contextMenu()<CR>
-    nnoremap <buffer> K    :call LanguageClient#textDocument_hover()<CR>
-    nnoremap <buffer> gd   :call LanguageClient#textDocument_definition()<CR>
-    nnoremap <buffer> <F2> :call LanguageClient#textDocument_rename()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocActionAsync('doHover')
+  endif
 endfunction
 
-augroup LanguageClient_config
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+
+augroup coc
     autocmd!
-    autocmd User LanguageClientTextDocumentDidOpenPost call HandleLanguageClientStarted()
+
+    autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+    autocmd User CocJumpPlaceHolder call CocActionAsync('showSignatureHelp')
+    autocmd CursorHold * silent call CocActionAsync('highlight')
 augroup END
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+nmap <leader>ac  <Plug>(coc-codeaction)
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+nmap <leader>rn <Plug>(coc-rename)
 
 """"""""""""
 " NERDTree "
@@ -411,7 +407,9 @@ map <C-n> :NERDTreeToggle<CR>
 " HEXOKINASE "
 """"""""""""""
 
-let g:Hexokinase_ftAutoload = ["css", "javascript.jsx", "xdefaults"]
+if &termguicolors
+    let g:Hexokinase_ftAutoload = ["css", "javascript.jsx", "xdefaults"]
+endif
 
 """""""""
 " SEIYA "
@@ -419,5 +417,3 @@ let g:Hexokinase_ftAutoload = ["css", "javascript.jsx", "xdefaults"]
 
 let g:seiya_auto_enable=exists('$TMUX')
 let g:seiya_target_groups = &termguicolors ? ['guibg'] : ['ctermbg']
-
-let g:rust_fold=1
