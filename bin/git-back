@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+set -eo pipefail
+
+git status --porcelain --untracked-files=no -z \
+    | sed -E -n -z 's/^\s*M\s*(.+)/\1/p' \
+    | "$SHELL" -c "xargs -0 \"$EDITOR\""
