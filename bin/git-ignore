@@ -7,10 +7,9 @@ join_args() {
     printf "%s" "$1"
     shift
 
-    while [ $# -gt 0 ]; do
-        printf "%s%s" "$joiner" "$1"
-        shift
-    done
+    if [ $# -gt 0 ]; then
+        printf "$joiner%s" "$@"
+    fi
 }
 
 wget "https://www.gitignore.io/api/$(join_args "," "$@")" -O .gitignore
