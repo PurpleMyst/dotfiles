@@ -14,8 +14,14 @@
       "initializationOptions": {
         "cacheDirectory": "/tmp/cquery"
       }
+    },
+
+    "dls": {
+      "command": "/home/au/.dub/packages/.bin/dls-latest/dls",
+      "filetypes": ["d"]
     }
   },
+
   "python.linting.pylintEnabled": false,
   "python.linting.mypyEnabled": true,
   "python.linting.flake8Args": ["--max-line-length=120"],
