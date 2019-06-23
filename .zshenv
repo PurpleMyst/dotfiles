@@ -1,55 +1,43 @@
-function safe-source() {
-    test -f $1 && source $1
-}
+safe-source() { test -f "$1" && source "$1" }
 
 # version managers
 export NVM_DIR="${NVM_DIR:=$HOME/.nvm}"
 export PYENV_ROOT="${PYENV_ROOT:=$HOME/.pyenv}"
 
-# $PATH
+# PATH environment variable
     # System locations
-    export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:"
+    PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
     # Self-made scripts
-    export PATH="$HOME/bin:$PATH"
+    PATH="$HOME/bin:$PATH"
 
     # Per-user scripts
-    export PATH="$HOME/.local/bin:$PATH"
+    PATH="$HOME/.local/bin:$PATH"
 
     # Cargo
-    export PATH="$HOME/.cargo/bin:$PATH"
+    PATH="$HOME/.cargo/bin:$PATH"
 
     # LuaRocks
-    export PATH="$HOME/.luarocks/bin:$PATH"
+    PATH="$HOME/.luarocks/bin:$PATH"
 
     # Yarn
-    export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+    PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
-    # GhcUp
+    export PATH
+
+# Applications
     safe-source ~/.ghcup/env
 
-    # poetry
     safe-source ~/.poetry/env
 
-    # OPAM
     safe-source ~/.opam/opam-init/init.zsh
 
-    [[ ! $- =~ i ]] && safe-source $NVM_DIR/nvm.sh
+    [[ ! $- =~ i ]] && safe-source "$NVM_DIR/nvm.sh"
 
-# sccache
-if [ -x "$(command -v sccache)" ]; then
-    export RUSTC_WRAPPER=$(which sccache)
-fi
+    test -x "$(command -v sccache)" && export RUSTC_WRAPPER=$(which sccache)
 
-# weechat
-if [ -f ~/.weechat-passphrase.txt ]; then
-    export WEECHAT_PASSPHRASE=$(cat ~/.weechat-passphrase.txt)
-fi
+    test -f ~/.weechat-passphrase.txt && export WEECHAT_PASSPHRASE=$(cat ~/.weechat-passphrase.txt)
 
-# devkitpro
-safe-source /etc/profile.d/devkit-env.sh
+    safe-source /etc/profile.d/devkit-env.sh
 
-# venv
-if [[ -n $VIRTUAL_ENV && -e $VIRTUAL_ENV/bin/activate ]]; then
-  source "$VIRTUAL_ENV/bin/activate"
-fi
+    test -n "$VIRTUAL_ENV" && safe-source "$VIRTUAL_ENV/bin/activate"
