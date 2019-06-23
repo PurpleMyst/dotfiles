@@ -72,7 +72,7 @@ Plug 'glts/vim-textobj-comment'
 Plug 'scrooloose/nerdtree'
 
 " Real colors
-Plug 'RRethy/vim-hexokinase'
+" Plug 'RRethy/vim-hexokinase'
 
 " Syntax plugins
 Plug 'PotatoesMaster/i3-vim-syntax'
@@ -352,6 +352,12 @@ let g:startify_commands = [
 \ ]
 
 """""""
+" FZF "
+"""""""
+
+nnoremap <leader>f :FZF<CR>
+
+"""""""
 " COC "
 """""""
 
@@ -374,7 +380,6 @@ function! s:show_documentation()
 endfunction
 
 nnoremap <silent> K :call <SID>show_documentation()<CR>
-
 
 augroup coc
     autocmd!
@@ -407,9 +412,9 @@ map <C-n> :NERDTreeToggle<CR>
 " HEXOKINASE "
 """"""""""""""
 
-if &termguicolors
-    let g:Hexokinase_ftAutoload = ["css", "javascript.jsx", "xdefaults"]
-endif
+" if &termguicolors
+"     let g:Hexokinase_ftAutoload = ["css", "javascript.jsx", "xdefaults"]
+" endif
 
 """""""""
 " SEIYA "

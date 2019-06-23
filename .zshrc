@@ -24,9 +24,9 @@ if [ -x "$(command -v tmux)" ]; then
     tn() {
         local session
         if [ $# = 0 ]; then
-            session=$(basename $(pwd))
+            session=$(basename "$(pwd)")
         else
-            session=$(basename $1)
+            session=$(basename "$1")
         fi
 
         tmux attach -t "$session" || tmux new -s "$session" "$@"
