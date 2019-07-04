@@ -12,4 +12,4 @@ join_args() {
     fi
 }
 
-wget "https://www.gitignore.io/api/$(join_args "," "$@")" -O .gitignore
+wget "https://www.gitignore.io/api/$(join_args "," "$@")" -O - >> .gitignore

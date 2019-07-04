@@ -1,0 +1,9 @@
+# Upload a given filename to termbin.
+if [ $# -le 1 ]; then
+    filename="/dev/stdin"
+else
+    filename="$1"
+fi
+
+nc termbin.com 9999 < "$filename"
+# vim ft=zsh

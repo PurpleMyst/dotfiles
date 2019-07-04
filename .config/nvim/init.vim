@@ -102,6 +102,14 @@ Plug 'easymotion/vim-easymotion'
 " Measure startup time
 Plug 'tweekmonster/startuptime.vim'
 
+" Debugger
+function! InstallGdb(info)
+    echo system("./install.sh")
+    UpdateRemotePlugins
+endfunction
+
+Plug 'sakhnik/nvim-gdb', { 'do': function('InstallGdb') }
+
 call plug#end()
 
 """"""""""""""""
@@ -367,16 +375,19 @@ set shortmess+=c
 set signcolumn=yes
 set updatetime=300
 
-set statusline^=%{coc#status()}
+let g:airline#extensions#coc#enabled = 1
+let g:airline_section_y = airline#section#create(['%{coc#status()}'])
 
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocActionAsync('doHover')
-  endif
+    if &filetype == 'vim' || &filetype == 'help'
+        execute 'help' expand('<cword>')
+    elseif &filetype == 'sh' || &filetype == 'zsh'
+        execute 'Man' expand('<cword>')
+    else
+        call CocActionAsync('doHover')
+    endif
 endfunction
 
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -415,6 +426,25 @@ map <C-n> :NERDTreeToggle<CR>
 " if &termguicolors
 "     let g:Hexokinase_ftAutoload = ["css", "javascript.jsx", "xdefaults"]
 " endif
+
+"""""""""""
+" NVIMGDB "
+"""""""""""
+
+" We're going to define single-letter keymaps, so don't try to define them
+" in the terminal window.  The debugger CLI should continue accepting text commands.
+function! NvimGdbNoTKeymaps()
+endfunction
+
+let g:nvimgdb_config_override = {
+  \ 'key_next': 'n',
+  \ 'key_step': 's',
+  \ 'key_finish': 'f',
+  \ 'key_continue': 'c',
+  \ 'key_until': 'u',
+  \ 'key_breakpoint': 'b',
+  \ 'set_tkeymaps': '',
+  \ }
 
 """""""""
 " SEIYA "

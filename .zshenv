@@ -1,8 +1,4 @@
-safe-source() { test -f "$1" && source "$1" }
-
-# version managers
-export NVM_DIR="${NVM_DIR:=$HOME/.nvm}"
-export PYENV_ROOT="${PYENV_ROOT:=$HOME/.pyenv}"
+safe-source() { [ -f "$1" ] && source "$1" }
 
 # PATH environment variable
     # System locations
@@ -25,19 +21,38 @@ export PYENV_ROOT="${PYENV_ROOT:=$HOME/.pyenv}"
 
     export PATH
 
+# Other environment variables
+    [ -x "$(command -v sccache)" ] && export RUSTC_WRAPPER=$(which sccache)
+
+    [ -f ~/.weechat-passphrase.txt ] && export WEECHAT_PASSPHRASE=$(cat ~/.weechat-passphrase.txt)
+
+    [ -d "$HOME/.nvm" ] && export NVM_DIR="$HOME/.nvm"
+    [ -d "$HOME/.pyenv" ] && export PYENV_ROOT="$HOME/.pyenv"
+
 # Applications
     safe-source ~/.ghcup/env
 
     safe-source ~/.poetry/env
 
-    safe-source ~/.opam/opam-init/init.zsh
-
-    [[ ! $- =~ i ]] && safe-source "$NVM_DIR/nvm.sh"
-
-    test -x "$(command -v sccache)" && export RUSTC_WRAPPER=$(which sccache)
-
-    test -f ~/.weechat-passphrase.txt && export WEECHAT_PASSPHRASE=$(cat ~/.weechat-passphrase.txt)
-
     safe-source /etc/profile.d/devkit-env.sh
 
-    test -n "$VIRTUAL_ENV" && safe-source "$VIRTUAL_ENV/bin/activate"
+
+# Lazy loaded environments
+    if [[ ! $- =~ i ]]; then  
+        if [ -n "$NVM_DIR" ]; then
+            safe-source "$NVM_DIR/nvm.sh"
+        fi
+
+        if [ -n "$PYENV_ROOT" ]; then
+            export PATH="$PYENV_ROOT/bin:$PATH"
+            eval "$(pyenv init -)"
+            eval "$(pyenv virtualenv-init -)"
+        fi
+    fi
+
+
+# Venv fix
+    [ -n "$VIRTUAL_ENV" ] && safe-source "$VIRTUAL_ENV/bin/activate"
+
+# skip global compinit cause we do it later
+    skip_global_compinit=1

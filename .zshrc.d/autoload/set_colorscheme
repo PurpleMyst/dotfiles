@@ -1,0 +1,23 @@
+if [ $# -ne 1 ]; then
+    echo "USAGE: $0 COLORSCHEME"
+    return 1
+fi
+
+export BASE16_COLORSCHEME=$1
+echo "$BASE16_COLORSCHEME" > ~/.colorscheme
+
+# set x colors
+BASE16_XRESOURCES=$BASE16_OUTPUT_DIR/xresources/xresources/base16-$BASE16_COLORSCHEME-256.Xresources
+if [ -f "$BASE16_XRESOURCES" ]; then
+    [ -f ~/.Xresources.d/colorscheme ] && unlink ~/.Xresources.d/colorscheme
+    ln --physical "$BASE16_XRESOURCES" ~/.Xresources.d/colorscheme
+
+    [ -x "$(command -v xrdb)" ] && xrdb ~/.Xresources
+fi
+
+# reload i3 colors
+pgrep -c '^i3$' > /dev/null && chronic i3 reload
+
+# set shell colors
+[ -f "$BASE16_OUTPUT_DIR/shell/scripts/base16-$BASE16_COLORSCHEME.sh" ] && sh "$BASE16_OUTPUT_DIR/shell/scripts/base16-$BASE16_COLORSCHEME.sh"
+# vim ft=zsh
