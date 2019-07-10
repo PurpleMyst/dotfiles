@@ -12,9 +12,10 @@ alias ta="tmux attach -t"
 alias gi="git init"
 alias ga="git add"
 alias gc="git commit"
+alias gcam="gc -am"
 alias gd="git diff"
-alias gcam="git commit -am"
 alias gst="git status"
+alias gp="git push"
 
 # python
 alias pi="python3 -m pip install --user"

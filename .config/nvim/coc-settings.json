@@ -19,6 +19,12 @@
     "dls": {
       "command": "/home/au/.dub/packages/.bin/dls-latest/dls",
       "filetypes": ["d"]
+    },
+
+    "nimlsp": {
+       "command": "nimlsp",
+       "args": ["/home/au/.nimble/pkgs/nimlsp-0.1.0/nimlsppkg/Nim"],
+       "filetypes": ["nim"]
     }
   },
 

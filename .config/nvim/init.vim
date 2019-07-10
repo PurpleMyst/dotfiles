@@ -7,6 +7,9 @@ set pyxversion=3
 
 call plug#begin(stdpath('config') . '/bundle')
 
+" Editor config for working with others
+Plug 'editorconfig/editorconfig-vim'
+
 " Syntax Checking
 Plug 'benekastah/neomake'
 
@@ -89,6 +92,7 @@ Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
 Plug 'ziglang/zig.vim'
 Plug 'mxw/vim-jsx'
 Plug 'AndrewRadev/splitjoin.vim'
+Plug 'zah/nim.vim', { 'for': 'nim' }
 
 " Rainbow parenthesis
 Plug 'junegunn/rainbow_parentheses.vim'
@@ -254,6 +258,12 @@ augroup END
 set background=dark
 let base16colorspace=256
 execute ":colorscheme base16-" . $BASE16_COLORSCHEME
+
+"""""""""""""
+" GUICURSOR "
+"""""""""""""
+
+set guicursor=
 
 """""""""""""""""""
 " PLUGIN SETTINGS "
