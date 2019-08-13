@@ -34,14 +34,13 @@ set_from_resource $color19     i3wm.color19     #000000
 set_from_resource $color20     i3wm.color20     #000000
 set_from_resource $color21     i3wm.color21     #000000
 
-set_from_resource $fontName    i3wm.fontName    Ubuntu Mono
-set_from_resource $fontSize    i3wm.fontSize    11
+set_from_resource $font    i3wm.font    pango:UbuntuMono Nerd Font Mono 11.9
 
 ##############
 # APPEARANCE #
 ##############
 
-font pango:$fontName $fontSize
+font $font
 
 #                       border  bg      text        indicator
 client.focused          $color8 $color8 $foreground $background
@@ -60,7 +59,6 @@ smart_borders on
 ################
 
 exec --no-startup-id "redshift-gtk -l41.9028:12.4964"
-#exec --no-startup-id "compton -b"
 exec --no-startup-id "feh --bg-scale ~/.wallpaper"
 
 ###################
@@ -167,8 +165,10 @@ bindsym $mod+Shift+0 move container to workspace $ws10
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
+
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
+
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
@@ -211,4 +211,6 @@ bar {
     workspace_buttons yes
 
     position top
+
+    height 19
 }

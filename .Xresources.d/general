@@ -1,4 +1,4 @@
 ! Font
-*.font: xft:MAINFONT:size=FONTSIZE,style=Regular
+*.font: xft:MAINFONT:size=FONTSIZE:style=Regular
 
 ! vim: filetype=xdefaults

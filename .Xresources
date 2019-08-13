@@ -1,5 +1,5 @@
 #define FONTSIZE 11
-#define MAINFONT Ubuntu Mono
+#define MAINFONT UbuntuMono Nerd Font Mono
 #define BROWSER firefox
 
 ! TODO: Replace a lot of stuff with #define.

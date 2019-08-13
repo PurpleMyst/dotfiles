@@ -74,8 +74,8 @@ Plug 'glts/vim-textobj-comment'
 " NERDTree
 Plug 'scrooloose/nerdtree'
 
-" Real colors
-" Plug 'RRethy/vim-hexokinase'
+" DevIcons
+Plug 'ryanoasis/vim-devicons'
 
 " Syntax plugins
 Plug 'PotatoesMaster/i3-vim-syntax'
@@ -93,6 +93,7 @@ Plug 'ziglang/zig.vim'
 Plug 'mxw/vim-jsx'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'zah/nim.vim', { 'for': 'nim' }
+Plug 'https://github.com/wlangstroth/vim-racket', { 'for': 'racket' }
 
 " Rainbow parenthesis
 Plug 'junegunn/rainbow_parentheses.vim'
@@ -130,6 +131,11 @@ syntax on
 " Don't redraw during macros
 set lazyredraw
 
+" Consider tabs
+set switchbuf=usetab
+nnoremap <F8> :sbnext<CR>
+nnoremap <S-F8> :sbprevious<CR>
+
 " Enable syntax folding (<3 FastFold)
 set foldmethod=syntax
 
@@ -148,6 +154,13 @@ noremap <Right> <NOP>
 " Re-highlight the same area after indenting in visual mode
 vnoremap < <gv
 vnoremap > >gv
+
+" Move to start/end of word without switching words
+nnoremap <leader>b viwo<Esc>
+nnoremap <leader>e viw<Esc>
+
+" Confirm when using ZZ
+nnoremap ZZ :confirm q<CR>
 
 " Underline search results
 set hlsearch
@@ -217,7 +230,12 @@ augroup style
     autocmd!
 
     " Use 2-space wide indents in languages where it is convention
-    autocmd FileType lisp,clojure,haskell,yaml,dart,javascript.jsx,typescript,json
+    autocmd FileType
+        \ lisp,racket,clojure
+        \,haskell
+        \,yaml
+        \,dart
+        \,html,javascript.jsx,typescript,json
         \ setlocal shiftwidth=2 softtabstop=2 tabstop=2
 
     " Create a filled-in column at 88 columns
@@ -229,6 +247,19 @@ augroup rust
 
     autocmd FileType rust setlocal nosmartindent
     autocmd BufWritePre *.rs silent! RustFmt
+augroup END
+
+augroup parcel
+    autocmd!
+
+    " For Parcel's hot module reloading feature
+    autocmd FileType javascript.jsx,typescript,json setlocal backupcopy=yes
+augroup END
+
+augroup markdown
+    autocmd!
+
+    autocmd FileType markdown let @h='yypVr'
 augroup END
 
 function! s:mtime(filename)
@@ -258,6 +289,9 @@ augroup END
 set background=dark
 let base16colorspace=256
 execute ":colorscheme base16-" . $BASE16_COLORSCHEME
+
+" Show comments in italic cause Victor Mono is very pretty
+highlight Comment cterm=italic gui=italic
 
 """""""""""""
 " GUICURSOR "
@@ -315,8 +349,8 @@ let g:plug_window = 'enew'
 " AIRLINE/TMUXLINE "
 """"""""""""""""""""
 
-let g:airline_powerline_fonts = 0
-let g:tmuxline_powerline_separators = 0
+let g:airline_powerline_fonts = 1
+let g:tmuxline_powerline_separators = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tmuxline#enabled = 0
@@ -342,7 +376,7 @@ endfunction
 augroup rainbow
     autocmd!
 
-    autocmd FileType rust,python,lisp,clojure,haskell call SetRainbowParentheses()
+    autocmd FileType rust,python,lisp,racket,clojure,haskell call SetRainbowParentheses()
 augroup END
 
 """"""""""""
