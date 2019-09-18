@@ -290,9 +290,6 @@ set background=dark
 let base16colorspace=256
 execute ":colorscheme base16-" . $BASE16_COLORSCHEME
 
-" Show comments in italic cause Victor Mono is very pretty
-highlight Comment cterm=italic gui=italic
-
 """""""""""""
 " GUICURSOR "
 """""""""""""
