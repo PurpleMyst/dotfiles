@@ -37,25 +37,6 @@ export PATH
 ###########
 [ -f ~/.weechat-passphrase.txt ] && export WEECHAT_PASSPHRASE=$(cat ~/.weechat-passphrase.txt)
 
-#########
-# langs #
-#########
-[ -d "$HOME/.nvm" ] && export NVM_DIR="$HOME/.nvm"
-[ -d "$HOME/.pyenv" ] && export PYENV_ROOT="$HOME/.pyenv"
-
-if [[ ! $- =~ i ]]; then  
-    if [ -n "$NVM_DIR" ]; then
-        safe-source "$NVM_DIR/nvm.sh"
-    fi
-
-    if [ -n "$PYENV_ROOT" ]; then
-        export PATH="$PYENV_ROOT/bin:$PATH"
-        eval "$(pyenv init -)"
-        eval "$(pyenv virtualenv-init -)"
-    fi
-fi
-
-
 ########
 # venv #
 ########
