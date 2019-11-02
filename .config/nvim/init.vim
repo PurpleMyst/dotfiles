@@ -57,8 +57,20 @@ Plug 'garbas/vim-snipmate'
 
 " Auto-Completion
 Plug 'neoclide/coc.nvim', { 'do': 'zsh install.sh nightly' }
-Plug 'neoclide/coc-tsserver', { 'do': 'yarn install --frozen-lockfile' }
-Plug 'neoclide/coc-tslint-plugin', { 'do': 'yarn install --frozen-lockfile' }
+command! -nargs=1 PlugCoc Plug <args>, { 'do': 'yarn install --frozen-lockfile' }
+
+" Auto-Completion plugins
+PlugCoc 'neoclide/coc-tsserver'
+PlugCoc 'neoclide/coc-sources'
+PlugCoc 'neoclide/coc-tslint-plugin'
+PlugCoc 'neoclide/coc-rls'
+PlugCoc 'neoclide/coc-python'
+PlugCoc 'neoclide/coc-json'
+PlugCoc 'neoclide/coc-css'
+PlugCoc 'amiralies/coc-elixir'
+
+" Snippets
+PlugCoc 'neoclide/coc-snippets'
 
 " Fuzzy finder
 Plug 'junegunn/fzf', { 'dir': '~/applications/fzf', 'do': './install --all' }
