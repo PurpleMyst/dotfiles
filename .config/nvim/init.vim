@@ -206,7 +206,7 @@ let &backupdir=stdpath('config') . '/backup/'
 let &directory=stdpath('config') . '/swap/'
 
 " Allows mouse usage (e.g. the scroll wheel)
-set mouse=a
+set mouse=n
 
 " Keep undo history even after exiting a file
 let &undodir=stdpath('config') . '/undo/'
