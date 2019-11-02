@@ -44,9 +44,6 @@ Plug 'mhinz/vim-startify'
 " Colorscheme
 Plug 'chriskempson/base16-vim'
 
-" Transparent background
-Plug 'miyakogi/seiya.vim'
-
 " (NeoVim + tmux) status line
 Plug 'bling/vim-airline' | Plug 'edkolev/tmuxline.vim' | Plug 'vim-airline/vim-airline-themes'
 
@@ -214,9 +211,7 @@ set fillchars+=stl:\ ,stlnc:\
 " Show the color column specially
 highlight ColorColumn ctermfg=NONE cterm=bold
 
-if $TERM !~ "rxvt"
-    set termguicolors
-endif
+set termguicolors
 
 """"""""""""""""
 " AUTOCOMMANDS "
@@ -460,22 +455,9 @@ nmap <leader>rn <Plug>(coc-rename)
 
 map <C-n> :NERDTreeToggle<CR>
 
-""""""""""""""
-" HEXOKINASE "
-""""""""""""""
-
-" if &termguicolors
-"     let g:Hexokinase_ftAutoload = ["css", "javascript.jsx", "xdefaults"]
-" endif
-
 """""""""""
 " NVIMGDB "
 """""""""""
-
-" We're going to define single-letter keymaps, so don't try to define them
-" in the terminal window.  The debugger CLI should continue accepting text commands.
-function! NvimGdbNoTKeymaps()
-endfunction
 
 let g:nvimgdb_config_override = {
   \ 'key_next': 'n',
@@ -486,10 +468,3 @@ let g:nvimgdb_config_override = {
   \ 'key_breakpoint': 'b',
   \ 'set_tkeymaps': '',
   \ }
-
-"""""""""
-" SEIYA "
-"""""""""
-
-let g:seiya_auto_enable=exists('$TMUX')
-let g:seiya_target_groups = &termguicolors ? ['guibg'] : ['ctermbg']
