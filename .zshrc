@@ -1,10 +1,14 @@
-safe-source ~/.zshrc.d/oxide.zsh-theme
+# Load our theme
+safe-source "$HOME/.zshrc.d/oxide.zsh-theme"
 
+# Load our lazily-defined functions
 fpath+=("$HOME/.zshrc.d/autoload")
-find ~/.zshrc.d/autoload -type f,l ! -name '*zwc*' | while read -r x; do autoload -Uz "$x"; done
+fd -E '*zwc*' . "$HOME/.zshrc.d/autoload" \
+| while IFS= read -r fun; do autoload -Uz "$fun"; done
 
-find ~/.zshrc.d/modules -type f,l ! -name '*zwc*' | while read -r x; do source "$x"; done
+# Load our configuration modules
+fd -E '*zwc*' . "$HOME/.zshrc.d/modules" \
+| while IFS= read -r mod; do source "$mod"; done
 
-source ~/.zshrc.d/plugins/load.zsh
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Load our plugins
+safe-source "$HOME/.zshrc.d/plugins/load.zsh"

@@ -1,8 +1,3 @@
-# Send out a notifaction.
-if [ -x "$(command -v notify-send)" ]; then
-    alias alert="notify-send -i terminal -t 5 'Alert from Terminal!'"
-fi
-
 # Force 256-color tmux
 alias tmux="tmux -2"
 alias tl="tmux list-sessions"
