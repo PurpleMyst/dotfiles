@@ -272,12 +272,12 @@ function! s:mtime(filename)
 endfunction
 
 function! s:HandleSwapExists()
-    if s:mtime(v:swapname) > s:mtime(expand("<afile>"))
+    if s:mtime(v:swapname) > s:mtime(expand('<afile>'))
         let v:swapchoice='r'
-        echom 'Restored ' . expand("<afile>") . ' from swap file'
+        echom 'Restored' expand('<afile>') 'from swap file'
     else
         let v:swapchoice='d'
-        echom 'Deleted swap file for ' . expand("<afile>")
+        echom 'Deleted swap file for' expand('<afile>')
     endif
 endfunction
 
@@ -293,7 +293,7 @@ augroup END
 
 set background=dark
 let base16colorspace=256
-execute ":colorscheme base16-" . $BASE16_COLORSCHEME
+execute ':colorscheme base16-' . $BASE16_COLORSCHEME
 
 """""""""""""
 " GUICURSOR "
