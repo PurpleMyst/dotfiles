@@ -430,21 +430,29 @@ function! s:show_documentation()
     if &filetype == 'vim' || &filetype == 'help'
         execute 'help' expand('<cword>')
     elseif &filetype == 'sh' || &filetype == 'zsh'
-        execute 'Man' expand('<cword>')
-    else
+        execute 'Man' 1 expand('<cword>')
+    elseif &filetype == 'c'
+        execute 'Man' 3 expand('<cword>')
+    elseif exists('g:coc_status')
         call CocActionAsync('doHover')
+    else
+        echoerr 'No idea how to get help'
     endif
 endfunction
 
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-augroup coc
-    autocmd!
+if exists("*CocAction")
+    augroup coc
+        autocmd!
 
-    autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-    autocmd User CocJumpPlaceHolder call CocActionAsync('showSignatureHelp')
-    autocmd CursorHold * silent call CocActionAsync('highlight')
-augroup END
+        autocmd User CocNvimInit echom 'Coc Started'
+
+        autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+        autocmd User CocJumpPlaceHolder call CocActionAsync('showSignatureHelp')
+        autocmd CursorHold * silent call CocActionAsync('highlight')
+    augroup END
+endif
 
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
