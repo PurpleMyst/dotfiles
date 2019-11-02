@@ -19,6 +19,8 @@ PATH="$HOME/.nimble/bin:$PATH"
 
 safe-source ~/.ghcup/env
 
+safe-source ~/.nix-profile/etc/profile.d/nix.sh
+
 safe-source ~/.poetry/env
 
 safe-source /etc/profile.d/devkit-env.sh
