@@ -169,9 +169,6 @@ vnoremap > >gv
 nnoremap <leader>b viwo<Esc>
 nnoremap <leader>e viw<Esc>
 
-" Confirm when using ZZ
-nnoremap ZZ :confirm q<CR>
-
 " Underline search results
 set hlsearch
 highlight Search cterm=underline ctermfg=NONE ctermbg=NONE
