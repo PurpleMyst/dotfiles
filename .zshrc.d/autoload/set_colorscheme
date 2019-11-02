@@ -1,3 +1,5 @@
+# vim: ft=zsh
+
 if [ $# -ne 1 ]; then
     echo "USAGE: $0 COLORSCHEME"
     return 1
@@ -12,7 +14,7 @@ if [ -f "$BASE16_XRESOURCES" ]; then
     [ -f ~/.Xresources.d/colorscheme ] && unlink ~/.Xresources.d/colorscheme
     ln --physical "$BASE16_XRESOURCES" ~/.Xresources.d/colorscheme
 
-    [ -x "$(command -v xrdb)" ] && xrdb ~/.Xresources
+    [ "${commands[xrdb]}" ] && xrdb ~/.Xresources
 fi
 
 # reload i3 colors

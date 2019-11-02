@@ -30,7 +30,7 @@ export PATH
 ###########
 # sccache #
 ###########
-[ -x "$(command -v sccache)" ] && export RUSTC_WRAPPER=$(which sccache)
+export RUSTC_WRAPPER="${commands[sccache]}"
 
 ###########
 # weechat #
