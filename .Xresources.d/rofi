@@ -15,6 +15,9 @@ rofi.font: MAINFONT FONTSIZE
 ! Let i3 choose the terminal to use
 rofi.terminal: i3-sensible-terminal
 
+! Utilize normal interactive shell environment when utilizing Shift+Enter
+rofi.run-shell-command: {terminal} -e zsh -ic {cmd}
+
 ! Enable the extended coloring options
 rofi.color-enabled: true
 
