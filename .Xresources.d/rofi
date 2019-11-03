@@ -11,7 +11,9 @@ rofi.scroll-method: 1
 
 ! Choose the same font as everything else
 rofi.font: MAINFONT FONTSIZE
-rofi.terminal: kitty
+
+! Let i3 choose the terminal to use
+rofi.terminal: i3-sensible-terminal
 
 ! Enable the extended coloring options
 rofi.color-enabled: true
