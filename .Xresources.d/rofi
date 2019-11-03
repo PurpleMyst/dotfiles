@@ -1,8 +1,15 @@
 ! vim: filetype=xdefaults
 
+! Set border width
 rofi.bw: 2
+
+! Set window width
 rofi.width: -80
+
+! Set scroll-method to continuous
 rofi.scroll-method: 1
+
+! Choose the same font as everything else
 rofi.font: MAINFONT FONTSIZE
 rofi.terminal: kitty
 
