@@ -22,7 +22,7 @@ rofi.run-shell-command: {terminal} -e zsh -ic {cmd}
 rofi.color-enabled: true
 
 ! Property Name     BG      Border  Separator
-rofi.color-window:  base01, base01, base00
+rofi.color-window:  base01, base01, base02
 
 ! Property Name     BG      FG      BG-alt  Head-BG Head-FG
 rofi.color-normal:  base01, base05, base01, base01, base07
