@@ -6,6 +6,9 @@ rofi.bw: 2
 ! Set window width
 rofi.width: -80
 
+! Enable only window and run so we can switch with Ctrl+Tab
+rofi.modi: run,window
+
 ! Set scroll-method to continuous
 rofi.scroll-method: 1
 
