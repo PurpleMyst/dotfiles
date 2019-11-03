@@ -27,10 +27,12 @@ rofi.color-enabled: true
 ! Property Name     BG      Border  Separator
 rofi.color-window:  base01, base01, base02
 
-! Property Name     BG      FG      BG-alt  Head-BG Head-FG
-rofi.color-normal:  base01, base05, base01, base01, base07
-rofi.color-active:  base01, base0D, base01, base01, base0D
-rofi.color-urgent:  base01, base08, base01, base01, base08
+! Property Name   BG      FG  BGalt   hlBG    hlFG
+#define color(fg) base01, fg, base01, base02, fg
+rofi.color-normal: color(base05)
+rofi.color-active: color(base0A)
+rofi.color-urgent: color(base08)
+#undef color
 
 ! Set the desired separator style
 rofi.separator-style: solid
