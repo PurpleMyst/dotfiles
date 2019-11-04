@@ -267,22 +267,22 @@ augroup markdown
     autocmd FileType markdown let @h='yypVr'
 augroup END
 
-function! s:mtime(filename)
-    return system('stat -c %Y ' . shellescape(a:filename))
-endfunction
-
-function! s:HandleSwapExists()
-    if s:mtime(v:swapname) > s:mtime(expand('<afile>'))
-        let v:swapchoice='r'
-        echom 'Restored' expand('<afile>') 'from swap file'
-    else
-        let v:swapchoice='d'
-        echom 'Deleted swap file for' expand('<afile>')
-    endif
-endfunction
-
 augroup swapexists
     autocmd!
+
+    function! s:mtime(filename)
+        return system('stat -c %Y ' . shellescape(a:filename))
+    endfunction
+
+    function! s:HandleSwapExists()
+        if s:mtime(v:swapname) > s:mtime(expand('<afile>'))
+            let v:swapchoice='r'
+            echom 'Restored' expand('<afile>') 'from swap file'
+        else
+            let v:swapchoice='d'
+            echom 'Deleted swap file for' expand('<afile>')
+        endif
+    endfunction
 
     autocmd SwapExists * call s:HandleSwapExists()
 augroup END
@@ -293,7 +293,19 @@ augroup END
 
 set background=dark
 let base16colorspace=256
-execute ':colorscheme base16-' . $BASE16_COLORSCHEME
+
+if exists('$BASE16_COLORSCHEME')
+    execute ':colorscheme base16-' . $BASE16_COLORSCHEME
+elseif filereadable($HOME . '/.colorscheme')
+    execute ':colorscheme base16-' . readfile($HOME . '/.colorscheme')[0]
+else
+    " If we don't have a clue which colorscheme to pick, just get a list of all
+    " base16 colorschemes and pick one at random.. or as close as we can get to
+    " random in VimL
+    let s:colors = getcompletion('base16-', 'color')
+    execute ':colorscheme' s:colors[localtime() % len(s:colors)]
+endif
+
 
 """""""""""""
 " GUICURSOR "
