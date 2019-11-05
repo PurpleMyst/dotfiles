@@ -421,15 +421,9 @@ let g:startify_commands = [
 " FZF "
 """""""
 
-nnoremap <leader>f :FZF<CR>
+nnoremap <leader>f :FZF --margin 1,4<CR>
 
 " FloatingFZF courtesy of https://www.reddit.com/r/neovim/comments/djmehv/-/f463fxr/
-let $FZF_DEFAULT_OPTS = '--color=dark' .
-                      \ ' --color=fg:15,bg:-1,hl:1,fg+:#ffffff,bg+:0,hl+:1' .
-                      \ ' --color=info:4,prompt:0,pointer:12,marker:4,spinner:11,header:-1' .
-                      \ ' --layout=reverse' .
-                      \ ' --margin=1,4'
-
 let g:fzf_layout = { 'window': 'call FloatingFZF()' }
 
 function! FloatingFZF()
