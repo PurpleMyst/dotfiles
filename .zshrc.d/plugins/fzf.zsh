@@ -2,9 +2,11 @@ export FZF_DEFAULT_COMMAND='fd --type file'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 FZF_DEFAULT_OPTS+='--color=dark'
-FZF_DEFAULT_OPTS+=' --color=fg:15,bg:-1,hl:1,fg+:#ffffff,bg+:0,hl+:1'
-FZF_DEFAULT_OPTS+=' --color=info:4,prompt:0,pointer:12,marker:4,spinner:11,header:-1'
+FZF_DEFAULT_OPTS+=" --color=fg:7,hl:8,fg+:15,bg+:${BASE16_HEX_COLORS[02]:-19}"
+FZF_DEFAULT_OPTS+=" --color=info:0,prompt:7,pointer:${BASE16_HEX_COLORS[02]:-19},marker:4,spinner:11,header:-1,gutter:0"
 FZF_DEFAULT_OPTS+=' --layout=reverse'
+FZF_DEFAULT_OPTS+=' --inline-info'
+FZF_DEFAULT_OPTS+=' --prompt="fzf: "'
 export FZF_DEFAULT_OPTS
 
 safe-source $HOME/.fzf.zsh
