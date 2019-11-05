@@ -229,7 +229,15 @@ set termguicolors
 """"""""""""""""
 
 augroup completion
+    autocmd!
+
     autocmd InsertLeave * pclose
+augroup END
+
+augroup autofunc
+    autocmd!
+
+    autocmd BufReadPost ~/.zshrc.d/autoload/* setfiletype zsh
 augroup END
 
 augroup style
