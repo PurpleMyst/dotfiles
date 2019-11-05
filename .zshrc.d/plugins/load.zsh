@@ -2,7 +2,7 @@ PLUGINS=$(dirname "$0")
 
 # Load regular plugins
 safe-source "$PLUGINS/zsh-colored-man-pages/colored-man-pages.plugin.zsh"
-safe-source "$HOME/.fzf.zsh"
+safe-source "$PLUGINS/fzf.zsh"
 
 # Load completions after regular plugins
 autoload -Uz compinit
