@@ -426,11 +426,14 @@ let g:startify_commands = [
     \ { 'uP' : ['Update plugin manager', 'PlugUpgrade'] },
 \ ]
 
+let g:startify_change_to_dir = 0
+let g:startify_change_to_vcs_root = 1
+
 """""""
 " FZF "
 """""""
 
-nnoremap <leader>f :FZF --margin 1,4<CR>
+nnoremap <leader>f :FZF --margin 1<CR>
 
 " FloatingFZF courtesy of https://www.reddit.com/r/neovim/comments/djmehv/-/f463fxr/
 let g:fzf_layout = { 'window': 'call FloatingFZF()' }
