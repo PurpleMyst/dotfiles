@@ -6,6 +6,7 @@ self: super:
     inherit (self)
       exa
       fd
+      go
       nodejs
       tldr
     ;
