@@ -419,6 +419,7 @@ let g:startify_use_env = 1
 let g:startify_bookmarks = [
     \ { 'C': '~/.config/nvim/init.vim' },
     \ { 'Z': '~/.zshrc' },
+    \ { 'N': '~/.config/nixpkgs/overlays/lnl.nix' },
 \ ]
 
 let g:startify_commands = [
