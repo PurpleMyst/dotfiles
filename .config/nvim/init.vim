@@ -104,6 +104,7 @@ Plug 'AndrewRadev/splitjoin.vim'
 Plug 'zah/nim.vim', { 'for': 'nim' }
 Plug 'https://github.com/wlangstroth/vim-racket', { 'for': 'racket' }
 Plug 'calviken/vim-gdscript3'
+Plug 'LnL7/vim-nix'
 
 " Rainbow parenthesis
 Plug 'junegunn/rainbow_parentheses.vim'

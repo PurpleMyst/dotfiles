@@ -1,0 +1,7 @@
+# -f '<nixpkgs>' -> search for nixpkgs in $NIX_PATH and set it as the active nix expression
+# -r -> remove all previously installed packages (so that we can rebuild)
+# -i -> install
+# -A -> search by attribute path, not declaration name
+# userPackages -> install packages defined in the overlay
+# $@ -> any extra supplied arguments
+nix-env -f '<nixpkgs>' -r -iA userPackages "$@"
