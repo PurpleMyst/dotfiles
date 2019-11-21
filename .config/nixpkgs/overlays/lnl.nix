@@ -7,6 +7,7 @@ self: super:
       exa
       fd
       go
+      neovim
       nodejs
       tldr
     ;

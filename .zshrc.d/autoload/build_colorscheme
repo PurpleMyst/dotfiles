@@ -7,4 +7,3 @@ if ! [ -d "$BASE16_OUTPUT_DIR" ]; then
     python3 pybase16.py update && python3 pybase16.py build
     popd || exit 1
 fi
-# vim ft=zsh

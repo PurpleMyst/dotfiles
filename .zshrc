@@ -1,16 +1,18 @@
-# Load our theme
-safe-source "$HOME/.zshrc.d/oxide.zsh-theme"
+# We utilize two EXTENDED_GLOB features:
+# `^` -> "inverse match"
+# `(:t)` -> "basename"
+setopt EXTENDED_GLOB
 
 # Load our lazily-defined functions
-fpath+=("$HOME/.zshrc.d/autoload")
-fd -0 -E '*zwc*' . "$HOME/.zshrc.d/autoload" \
-| while IFS= read -r -d $'\0' fun; do autoload -Uz "$fun"; done
-unset fun
+fpath+=($HOME/.zshrc.d/autoload)
+autoload -Uz $HOME/.zshrc.d/autoload/^*zwc*(:t)
 
 # Load our configuration modules
-fd -0 -E '*zwc*' . "$HOME/.zshrc.d/modules" \
-| while IFS= read -r -d $'\0' mod; do source "$mod"; done
-unset mod
+for f ($HOME/.zshrc.d/modules/^*zwc*)
+    source $f
+unset f
+
+unsetopt EXTENDED_GLOB
 
 # Load our plugins
-safe-source "$HOME/.zshrc.d/plugins/load.zsh"
+safe-source $HOME/.zshrc.d/plugins/load.zsh
