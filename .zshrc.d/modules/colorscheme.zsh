@@ -9,6 +9,6 @@ export BASE16_COLORSCHEME
 # Declare an associative array whose keys are the two-digit hex code for each
 # base16 color, and whose values are the hex colors
 
-if [ "${commands[rg]}" ]; then
+if [[ ${commands[rg]} ]]; then
     typeset -A BASE16_HEX_COLORS=($(rg 'base([0-9A-F]+)\[\] = "([^"]+)"' -or '$1 $2' "$BASE16_OUTPUT_DIR/c_header/headers/base16-$BASE16_COLORSCHEME.h"))
 fi
