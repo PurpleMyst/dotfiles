@@ -66,8 +66,9 @@ exec --no-startup-id xbindkeys
 # CUSTOM KEYBINDS #
 ###################
 
-# Lock the computer
+# Lock/Suspend the computer
 bindsym Control+$mod+l exec ~/.config/i3/lock
+bindsym Control+Shift+$mod+l exec ~/.config/i3/suspend
 
 # Move/Remove windows from the scratchpad
 bindsym $mod+Shift+minus move scratchpad
