@@ -243,13 +243,15 @@ augroup END
 augroup style
     autocmd!
 
+    autocmd FileType typescriptreact setl filetype=typescript.tsx
+
     " Use 2-space wide indents in languages where it is convention
     autocmd FileType
         \ lisp,racket,clojure
         \,haskell
         \,yaml
         \,dart
-        \,html,javascript.jsx,typescript,json
+        \,html,javascript.jsx,typescript,typescript.tsx,json
         \ setlocal shiftwidth=2 softtabstop=2 tabstop=2
 
     " Create a filled-in column at 88 columns
@@ -492,8 +494,6 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>
 if exists("*CocAction")
     augroup coc
         autocmd!
-
-        autocmd User CocNvimInit echom 'Coc Started'
 
         autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
         autocmd User CocJumpPlaceHolder call CocActionAsync('showSignatureHelp')
