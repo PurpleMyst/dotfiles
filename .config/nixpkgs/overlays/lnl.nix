@@ -4,6 +4,7 @@ self: super:
   userPackages = super.userPackages or {} // {
     # My packages
     inherit (self)
+      bat
       exa
       fd
       go
