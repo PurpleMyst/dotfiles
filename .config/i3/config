@@ -208,7 +208,7 @@ bar {
 
             #                  border      bg          text
             focused_workspace  $color2     $color2     $background
-            active_workspace   $color2     $color2     $foreground
+            active_workspace   $color2     $background $color2
             inactive_workspace $background $background $color8
             urgent_workspace   $color1     $background $color8
     }
