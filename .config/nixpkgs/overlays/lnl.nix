@@ -8,6 +8,7 @@ self: super:
       exa
       fd
       go
+      hyperfine
       neovim
       nodejs
       tldr
