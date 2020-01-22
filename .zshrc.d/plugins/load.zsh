@@ -1,8 +1,10 @@
 PLUGINS=$(dirname "$0")
 
 # Load regular plugins
-safe-source "$PLUGINS/zsh-colored-man-pages/colored-man-pages.plugin.zsh"
-safe-source "$PLUGINS/fzf.zsh"
+safe-source $PLUGINS/zsh-colored-man-pages/colored-man-pages.plugin.zsh
+safe-source $HOME/.config/broot/launcher/bash/br
+safe-source $PLUGINS/fzf.zsh
+export BAT_THEME=base16
 
 # Load completions after regular plugins
 autoload -Uz compinit
@@ -23,10 +25,10 @@ fi
 unsetopt EXTENDED_GLOB
 
 # Load syntax highlighting plugin after completions
-safe-source "$PLUGINS/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+safe-source $PLUGINS/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Load the prompt
-fpath+=("$PLUGINS/pure")
+fpath+=($PLUGINS/pure)
 autoload -Uz promptinit; promptinit
 prompt pure
 

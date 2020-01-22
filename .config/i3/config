@@ -170,6 +170,10 @@ bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
+# move workspace to connected displays
+bindsym $mod+Control+1 move workspace to output primary
+bindsym $mod+Control+2 move workspace to output HDMI-2
+
 # reload the configuration file
 bindsym $mod+Shift+c reload
 
