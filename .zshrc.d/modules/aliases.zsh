@@ -1,5 +1,5 @@
 # Force 256-color tmux
-alias tmux="tmux -2"
+alias tmux="tmux -2 -u"
 alias tl="tmux list-sessions"
 alias ta="tmux attach -t"
 
