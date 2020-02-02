@@ -1,7 +1,8 @@
 # Force 256-color tmux
 alias tmux="tmux -2 -u"
+alias tn="tmux new-session -s"
 alias tl="tmux list-sessions"
-alias ta="tmux attach -t"
+alias ta="tmux attach-session -t"
 
 # git
 alias gi="git init"
