@@ -1,8 +1,9 @@
-local session
-if [ $# = 0 ]; then
-    session=$(basename "$(pwd)")
-else
-    session=$(basename "$1")
-fi
+# The session name is the basename of either the first argument (if present) or
+# the current working directory
+local session=${${1:-$PWD}:t}
 
-tmux attach -t "$session" || tmux new -s "$session" "$@"
+if tmux has-session -t $session 2>/dev/null; then
+    tmux attach-session -t $session
+else
+    tmux new-session -s $session $@
+fi
