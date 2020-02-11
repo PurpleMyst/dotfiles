@@ -4,6 +4,9 @@ alias tn="tmux new-session -s"
 alias tl="tmux list-sessions"
 alias ta="tmux attach-session -t"
 
+# nvim
+alias n="nvim"
+
 # git
 alias gi="git init"
 alias ga="git add"
