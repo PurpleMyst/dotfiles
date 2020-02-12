@@ -21,3 +21,6 @@
     # Compile the plugin load script
     zrecompile -pq $HOME/.zshrc.d/plugins/load.zsh
 ) &!
+
+# Create a Tmuxline config on login
+tmux new-session -d "nvim +Tmuxline +'TmuxlineSnapshot $HOME/.tmuxline.conf' +q" &!
