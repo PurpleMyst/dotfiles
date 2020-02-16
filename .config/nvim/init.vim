@@ -142,11 +142,6 @@ syntax on
 " Don't redraw during macros
 set lazyredraw
 
-" Consider tabs
-set switchbuf=usetab
-nnoremap <F8> :sbnext<CR>
-nnoremap <S-F8> :sbprevious<CR>
-
 " Enable syntax folding (<3 FastFold)
 set foldmethod=syntax
 
@@ -196,11 +191,17 @@ set shiftwidth=4
 set softtabstop=4
 set tabstop=4
 
-" Wraps text at 80 columns. This gets disabled automatically when writing
-" source code, but still wraps comments. Even this one!
-set tw=79
+" Wraps text at 80 columns.
+set textwidth=79
+
+" Don't wrap code (visually)
 set nowrap
-set fo-=t
+
+" Do not automatically format code
+set formatoptions-=t
+
+" Do not automatically add comments when using the normal mode commands o and O
+set formatoptions-=o
 
 " Store backup/swap files in dedicated directories
 let &backupdir=stdpath('config') . '/backup/'
@@ -222,7 +223,11 @@ set fillchars+=stl:\ ,stlnc:\
 " Show the color column specially
 highlight ColorColumn ctermfg=NONE cterm=bold
 
+" Enable 24-bit RGB color in the TUI
 set termguicolors
+
+" Disable cursor shaping
+set guicursor=
 
 """"""""""""""""
 " AUTOCOMMANDS "
@@ -232,50 +237,6 @@ augroup completion
     autocmd!
 
     autocmd InsertLeave * pclose
-augroup END
-
-augroup autofunc
-    autocmd!
-
-    autocmd BufReadPost ~/.zshrc.d/autoload/* setfiletype zsh
-augroup END
-
-augroup style
-    autocmd!
-
-    autocmd FileType typescriptreact setl filetype=typescript.tsx
-
-    " Use 2-space wide indents in languages where it is convention
-    autocmd FileType
-        \ lisp,racket,clojure
-        \,haskell
-        \,yaml
-        \,dart
-        \,html,javascript.jsx,typescript,typescript.tsx,json
-        \ setlocal shiftwidth=2 softtabstop=2 tabstop=2
-
-    " Create a filled-in column at 88 columns
-    autocmd FileType python setl colorcolumn=88
-augroup END
-
-augroup rust
-    autocmd!
-
-    autocmd FileType rust setlocal nosmartindent
-    autocmd BufWritePre *.rs silent! RustFmt
-augroup END
-
-augroup parcel
-    autocmd!
-
-    " For Parcel's hot module reloading feature
-    autocmd FileType javascript.jsx,typescript,json setlocal backupcopy=yes
-augroup END
-
-augroup markdown
-    autocmd!
-
-    autocmd FileType markdown let @h='yypVr'
 augroup END
 
 augroup swapexists
@@ -317,13 +278,6 @@ else
     execute ':colorscheme' s:colors[localtime() % len(s:colors)]
 endif
 
-
-"""""""""""""
-" GUICURSOR "
-"""""""""""""
-
-set guicursor=
-
 """""""""""""""""""
 " PLUGIN SETTINGS "
 """""""""""""""""""
@@ -344,15 +298,10 @@ call neomake#configure#automake({
 let g:neomake_cpp_clang_args = ['-std=c++17', '-Wall', '-Wextra', '-Weffc++']
 let g:neomake_cpp_enabled_makers = ['clang', 'clangtidy', 'cppcheck']
 let g:neomake_c_clang_args = ['-std=c99', '-Wall', '-Wextra', '-Weffc++']
-let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.6/lib/libclang.so.1'
-let g:deoplete#sources#clang#clang_header = '/usr/include/clang'
 
 let g:neomake_python_enabled_makers = ['flake8']
 
 let g:neomake_sh_shellcheck_args = ['-fgcc']
-
-let g:deoplete#sources#rust#racer_binary=$HOME . '/.cargo/bin/racer'
-let g:deoplete#sources#rust#rust_source_path=$HOME . '/applications/rust/src'
 
 """""""""""
 " NEOTERM "
@@ -382,38 +331,26 @@ let g:airline#extensions#tmuxline#enabled = 0
 let g:tmuxline_theme = 'iceberg'
 let g:tmuxline_preset = 'tmux'
 
-"let g:airline_section_a = airline#section#create([])
-"let g:airline_section_b = airline#section#create([])
-"let g:airline_section_c = airline#section#create([])
-"let g:airline_section_x = airline#section#create([])
-"let g:airline_section_y = airline#section#create([])
-"let g:airline_section_z = airline#section#create([])
-
 """""""""""""""""""""""
 " RAINBOW PARENTHESES "
 """""""""""""""""""""""
 
+" This function is used in ftplugin/
 function! SetRainbowParentheses()
     autocmd BufEnter <buffer> RainbowParentheses
     autocmd BufLeave <buffer> RainbowParentheses!
 endfunction
 
-augroup rainbow
-    autocmd!
-
-    autocmd FileType rust,python,lisp,racket,clojure,haskell call SetRainbowParentheses()
-augroup END
-
 """"""""""""
 " STARTIFY "
 """"""""""""
 
-let g:startify_custom_header = 'map(startify#fortune#boxed(), ''"  " . v:val'')'
+let g:startify_custom_header = 'startify#center(startify#fortune#boxed())'
 
 let g:startify_lists = [
-    \ { 'type': 'dir',       'header': ['   Directory'] },
-    \ { 'type': 'bookmarks', 'header': ['   Bookmarks'] },
-    \ { 'type': 'commands',  'header': ['   Commands'] },
+    \ { 'type': 'dir',       'header': startify#pad(['Directory']) },
+    \ { 'type': 'bookmarks', 'header': startify#pad(['Bookmarks']) },
+    \ { 'type': 'commands',  'header': startify#pad(['Commands']) },
 \ ]
 
 let g:startify_use_env = 1
@@ -495,7 +432,7 @@ if exists("*CocAction")
     augroup coc
         autocmd!
 
-        autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+        autocmd FileType typescript,json setlocal formatexpr=CocAction('formatSelected')
         autocmd User CocJumpPlaceHolder call CocActionAsync('showSignatureHelp')
         autocmd CursorHold * silent call CocActionAsync('highlight')
     augroup END
