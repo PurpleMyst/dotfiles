@@ -69,14 +69,22 @@ function! PostUpdateHook(info, cmd)
         \ 'on_stderr': funcref('HandleJobOutput'),
     \ })
 
-    let l:job_status = jobwait([l:job_id])
+    let l:job_status = jobwait([l:job_id])[0]
 
-    if l:job_status[0] == 0
+    if l:job_status == 0
         call nvim_win_close(l:win_id, v:false)
+    elseif l:job_status == -2
+        throw 'Job ' . string(l:job_id) . ' was interrupted'
+    else
+        throw 'Job ' . string(l:job_id) . ' exited with status ' . string(l:job_status[0])
     endif
 endfunction
 
-Plug 'universal-ctags/ctags', { 'do': { info -> PostUpdateHook(info, './autogen.sh && ./configure --prefix=' . g:ctags_prefix . ' && make -j8 && make install') } }
+Plug 'universal-ctags/ctags', {
+    \ 'do':
+        \ { info -> PostUpdateHook(info, './autogen.sh && ./configure --prefix=' . shellescape(g:ctags_prefix) . ' && make -j8 && make install') }
+    \ }
+
 Plug 'majutsushi/tagbar'
 
 " EasyAlign
@@ -306,7 +314,7 @@ augroup swapexists
     autocmd!
 
     function! s:mtime(filename)
-        return system('stat -c %Y ' . shellescape(a:filename))
+        return system(['stat', '-c', '%Y', a:filename])
     endfunction
 
     function! s:HandleSwapExists()
@@ -509,13 +517,13 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-nmap <leader>ac  <Plug>(coc-codeaction)
-nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <silent> <leader>ac  <Plug>(coc-codeaction)
+nmap <silent> <leader>qf  <Plug>(coc-fix-current)
 
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
+xmap <silent> <leader>a  <Plug>(coc-codeaction-selected)
+nmap <silent> <leader>a  <Plug>(coc-codeaction-selected)
 
-nmap <leader>rn <Plug>(coc-rename)
+nmap <silent> <leader>rn <Plug>(coc-rename)
 
 """"""""""""
 " NERDTree "
