@@ -1,4 +1,4 @@
-# Force 256-color tmux
+# tmux
 alias tmux="tmux -2 -u"
 alias tn="tmux new-session -s"
 alias tl="tmux list-sessions"
@@ -19,7 +19,3 @@ alias gp="git push"
 
 # python
 alias pi="python3 -m pip install --user"
-
-# Latest clang version
-alias clang="clang-7"
-alias clang++="clang++-7"
