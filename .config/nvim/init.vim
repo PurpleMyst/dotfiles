@@ -458,6 +458,9 @@ function! FloatingFZF()
         \ 'height': l:height,
         \ 'style': 'minimal'
     \ })
+
+    " Close the buffer if you press <ESC>
+    execute 'autocmd TermLeave <buffer=' . l:buf . '> close'
 endfunction
 
 """""""
