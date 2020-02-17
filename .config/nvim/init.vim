@@ -5,7 +5,8 @@ set pyxversion=3
 " PLUGINS "
 """""""""""
 
-call plug#begin(stdpath('config') . '/bundle')
+let g:bundle_directory = stdpath('config') . '/bundle'
+call plug#begin(g:bundle_directory)
 
 " Editor config for working with others
 Plug 'editorconfig/editorconfig-vim'
@@ -15,6 +16,68 @@ Plug 'benekastah/neomake'
 
 " Better Terminals
 Plug 'kassio/neoterm'
+
+" Tagbar
+let g:ctags_prefix = g:bundle_directory . '/ctags-install'
+if !isdirectory(g:ctags_prefix)
+    call mkdir(g:ctags_prefix)
+endif
+
+function! PostUpdateHook(info, cmd)
+    if a:info.status == "unchanged"
+        return
+    endif
+
+    let s:chunk = ''
+    function! HandleJobOutput(job_id, data, event)
+        " Prepend the stored line chunk to the first line
+        let a:data[0] = s:chunk . a:data[0]
+
+        " The last line is incomplete, so store it as a chunk
+        let s:chunk = remove(a:data, -1)
+
+        " If there are any complete lines append them to the current window and
+        " redraw
+        if len(a:data) != 0
+            call append(line('$'), a:data)
+            call cursor(line('$'), 1)
+            redraw!
+        endif
+    endfunction
+
+    let l:buf = nvim_create_buf(v:false, v:true)
+    " call setbufvar(buf, '&signcolumn', 'no')
+
+    let l:width = float2nr(&columns - 20)
+    let l:height = float2nr(40)
+    let l:col = float2nr((&columns - l:width) / 2)
+    let l:row = float2nr((&lines - l:height) / 2)
+
+    let l:win_id = nvim_open_win(buf, v:true, {
+        \ 'relative': 'editor',
+        \ 'row': l:row,
+        \ 'col': l:col,
+        \ 'width': l:width,
+        \ 'height': l:height,
+        \ 'style': 'minimal'
+    \ })
+
+    call append(0, '$ ' . a:cmd)
+
+    let l:job_id = jobstart(a:cmd, {
+        \ 'on_stdout': funcref('HandleJobOutput'),
+        \ 'on_stderr': funcref('HandleJobOutput'),
+    \ })
+
+    let l:job_status = jobwait([l:job_id])
+
+    if l:job_status[0] == 0
+        call nvim_win_close(l:win_id, v:false)
+    endif
+endfunction
+
+Plug 'universal-ctags/ctags', { 'do': { info -> PostUpdateHook(info, './autogen.sh && ./configure --prefix=' . g:ctags_prefix . ' && make -j8 && make install') } }
+Plug 'majutsushi/tagbar'
 
 " EasyAlign
 Plug 'junegunn/vim-easy-align'
@@ -102,7 +165,7 @@ Plug 'ziglang/zig.vim'
 Plug 'mxw/vim-jsx'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'zah/nim.vim', { 'for': 'nim' }
-Plug 'https://github.com/wlangstroth/vim-racket', { 'for': 'racket' }
+Plug 'wlangstroth/vim-racket', { 'for': 'racket' }
 Plug 'calviken/vim-gdscript3'
 Plug 'LnL7/vim-nix'
 
@@ -119,12 +182,12 @@ Plug 'easymotion/vim-easymotion'
 Plug 'tweekmonster/startuptime.vim'
 
 " Debugger
-function! InstallGdb(info)
-    echo system("./install.sh")
+function! InstallGDB(info)
+    call PostUpdateHook(a:info, './install.sh')
     UpdateRemotePlugins
 endfunction
 
-Plug 'sakhnik/nvim-gdb', { 'do': function('InstallGdb') }
+Plug 'sakhnik/nvim-gdb', { 'do': funcref('InstallGDB') }
 
 call plug#end()
 
@@ -218,7 +281,7 @@ set undofile
 set inccommand=split
 
 " Which characters to use to fill the statusline
-set fillchars+=stl:\ ,stlnc:\   
+let &fillchars='stl:\ ,stlnc:\   '
 
 " Show the color column specially
 highlight ColorColumn ctermfg=NONE cterm=bold
@@ -382,8 +445,8 @@ function! FloatingFZF()
     let l:buf = nvim_create_buf(v:false, v:true)
     call setbufvar(buf, '&signcolumn', 'no')
 
-    let l:height = float2nr(10)
     let l:width = float2nr(80)
+    let l:height = float2nr(10)
     let l:col = float2nr((&columns - l:width) / 2)
     let l:row = float2nr((&lines - l:height) / 2)
 
@@ -470,3 +533,10 @@ let g:nvimgdb_config_override = {
   \ 'key_breakpoint': 'b',
   \ 'set_tkeymaps': '',
   \ }
+
+""""""""""
+" TAGBAR "
+""""""""""
+
+nnoremap <F8> :Tagbar<CR>
+let g:tagbar_ctags_bin = g:ctags_prefix . '/bin/ctags'
