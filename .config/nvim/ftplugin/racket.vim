@@ -1,5 +1,5 @@
 setlocal shiftwidth=2 softtabstop=2 tabstop=2
 
-if exists("*SetRainbowParentheses")
+if exists('*SetRainbowParentheses')
     call SetRainbowParentheses()
 endif

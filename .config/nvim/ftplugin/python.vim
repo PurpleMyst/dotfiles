@@ -1,5 +1,5 @@
 setlocal colorcolumn=80
 
-if exists("*SetRainbowParentheses")
+if exists('*SetRainbowParentheses')
     call SetRainbowParentheses()
 endif

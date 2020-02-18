@@ -1,4 +1,6 @@
-let g:python3_host_prog="/usr/bin/python3"
+scriptencoding utf-8
+
+let g:python3_host_prog='/usr/bin/python3'
 set pyxversion=3
 
 """""""""""
@@ -24,7 +26,7 @@ if !isdirectory(g:ctags_prefix)
 endif
 
 function! PostUpdateHook(info, cmd)
-    if a:info.status == "unchanged"
+    if a:info.status ==# 'unchanged'
         return
     endif
 
@@ -83,7 +85,7 @@ endfunction
 Plug 'universal-ctags/ctags', {
     \ 'do':
         \ { info -> PostUpdateHook(info, './autogen.sh && ./configure --prefix=' . shellescape(g:ctags_prefix) . ' && make -j8 && make install') }
-    \ }
+\ }
 
 Plug 'majutsushi/tagbar'
 
@@ -408,8 +410,8 @@ let g:tmuxline_preset = 'tmux'
 
 " This function is used in ftplugin/
 function! SetRainbowParentheses()
-    autocmd BufEnter <buffer> RainbowParentheses
-    autocmd BufLeave <buffer> RainbowParentheses!
+    autocmd rainbow BufEnter <buffer> RainbowParentheses
+    autocmd rainbow BufLeave <buffer> RainbowParentheses!
 endfunction
 
 """"""""""""
@@ -487,11 +489,11 @@ let g:airline_section_y = airline#section#create(['%{coc#status()}'])
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 function! s:show_documentation()
-    if &filetype == 'vim' || &filetype == 'help'
+    if &filetype ==? 'vim' || &filetype ==? 'help'
         execute 'help' expand('<cword>')
-    elseif &filetype == 'sh' || &filetype == 'zsh'
+    elseif &filetype ==? 'sh' || &filetype ==? 'zsh'
         execute 'Man' 1 expand('<cword>')
-    elseif &filetype == 'c'
+    elseif &filetype ==?'c'
         execute 'Man' 3 expand('<cword>')
     elseif exists('g:coc_status')
         call CocActionAsync('doHover')
@@ -502,7 +504,7 @@ endfunction
 
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-if exists("*CocAction")
+if exists('*CocAction')
     augroup coc
         autocmd!
 
@@ -529,21 +531,21 @@ nmap <silent> <leader>rn <Plug>(coc-rename)
 " NERDTree "
 """"""""""""
 
-map <C-n> :NERDTreeToggle<CR>
+noremap <C-n> :NERDTreeToggle<CR>
 
 """""""""""
 " NVIMGDB "
 """""""""""
 
 let g:nvimgdb_config_override = {
-  \ 'key_next': 'n',
-  \ 'key_step': 's',
-  \ 'key_finish': 'f',
-  \ 'key_continue': 'c',
-  \ 'key_until': 'u',
-  \ 'key_breakpoint': 'b',
-  \ 'set_tkeymaps': '',
-  \ }
+    \ 'key_next': 'n',
+    \ 'key_step': 's',
+    \ 'key_finish': 'f',
+    \ 'key_continue': 'c',
+    \ 'key_until': 'u',
+    \ 'key_breakpoint': 'b',
+    \ 'set_tkeymaps': '',
+\ }
 
 """"""""""
 " TAGBAR "

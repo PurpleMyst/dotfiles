@@ -3,10 +3,12 @@ setlocal nosmartindent
 setlocal formatoptions-=o
 
 " Automatically format on write if the buffer has been changed
-if exists(":RustFmt")
-    autocmd BufWritePre <buffer> if &modified | call rustfmt#Format() | endif
+if exists(':RustFmt')
+    augroup rustfmt
+        autocmd BufWritePre <buffer> if &modified | call rustfmt#Format() | endif
+    augroup END
 endif
 
-if exists("*SetRainbowParentheses")
+if exists('*SetRainbowParentheses')
     call SetRainbowParentheses()
 endif
