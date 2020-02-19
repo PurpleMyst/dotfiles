@@ -25,67 +25,80 @@ if !isdirectory(g:ctags_prefix)
     call mkdir(g:ctags_prefix)
 endif
 
-function! PostUpdateHook(info, cmd)
+function! PostUpdateHook(info, cmds)
     if a:info.status ==# 'unchanged'
         return
     endif
 
-    let s:chunk = ''
-    function! HandleJobOutput(job_id, data, event)
-        " Prepend the stored line chunk to the first line
-        let a:data[0] = s:chunk . a:data[0]
-
-        " The last line is incomplete, so store it as a chunk
-        let s:chunk = remove(a:data, -1)
-
-        " If there are any complete lines append them to the current window and
-        " redraw
-        if len(a:data) != 0
-            call append(line('$'), a:data)
-            call cursor(line('$'), 1)
-            redraw!
-        endif
-    endfunction
-
     let l:buf = nvim_create_buf(v:false, v:true)
-    " call setbufvar(buf, '&signcolumn', 'no')
 
     let l:width = float2nr(&columns - 20)
     let l:height = float2nr(40)
     let l:col = float2nr((&columns - l:width) / 2)
     let l:row = float2nr((&lines - l:height) / 2)
 
-    let l:win_id = nvim_open_win(buf, v:true, {
-        \ 'relative': 'editor',
-        \ 'row': l:row,
-        \ 'col': l:col,
-        \ 'width': l:width,
-        \ 'height': l:height,
-        \ 'style': 'minimal'
-    \ })
+    let l:window = nvim_open_win(buf, v:true, {
+        \'relative': 'editor',
+        \'row': l:row,
+        \'col': l:col,
+        \'width': l:width,
+        \'height': l:height,
+        \'style': 'minimal'
+    \})
 
-    call append(0, '$ ' . a:cmd)
+    let l:chunk = ''
+    function! s:HandleJobOutput(job_id, data, event) closure
+        " Prepend the stored line chunk to the first line
+        let a:data[0] = l:chunk . a:data[0]
 
-    let l:job_id = jobstart(a:cmd, {
-        \ 'on_stdout': funcref('HandleJobOutput'),
-        \ 'on_stderr': funcref('HandleJobOutput'),
-    \ })
+        " The last line is incomplete, so store it as a chunk
+        let l:chunk = remove(a:data, -1)
 
-    let l:job_status = jobwait([l:job_id])[0]
+        " Append the complete lines to the buffer and scroll
+        if len(a:data) != 0
+            call nvim_buf_set_lines(l:buf, -1, -1, v:false, a:data)
+            call nvim_win_set_cursor(l:window, [nvim_buf_line_count(l:buf), 0])
+            redraw!
+        endif
+    endfunction
 
-    if l:job_status == 0
-        call nvim_win_close(l:win_id, v:false)
-    elseif l:job_status == -2
-        throw 'Job ' . string(l:job_id) . ' was interrupted'
-    else
-        throw 'Job ' . string(l:job_id) . ' exited with status ' . string(l:job_status[0])
-    endif
+    " We utilize this variable to make it so the first line isn't empty
+    let l:start = 0
+    for l:cmd in a:cmds
+        if type(l:cmd) == v:t_string
+            call nvim_buf_set_lines(l:buf, l:start, -1, v:false, ['$ ' . l:cmd])
+        elseif type(l:cmd) == v:t_list
+            call nvim_buf_set_lines(l:buf, l:start, -1, v:false, ['$ ' . join(map(copy(l:cmd), { _, v -> shellescape(v) }), ' ')])
+        endif
+        let l:start = -1
+
+        let l:job = jobstart(l:cmd, {
+            \'on_stdout': funcref('s:HandleJobOutput'),
+            \'on_stderr': funcref('s:HandleJobOutput'),
+        \})
+
+        let l:status = jobwait([l:job])[0]
+        if l:status == 0
+            call nvim_buf_set_lines(l:buf, -1, -1, v:false, ['[ exited with 0 ]'])
+        elseif l:status == -2
+            throw 'Job ' . string(l:job) . ' was interrupted'
+        else
+            call nvim_buf_set_lines(l:buf, -1, -1, v:false, ['[ exited with ' . string(l:status) . ' ]'])
+            throw 'Job ' . string(l:job) . ' exited with status ' . string(l:status)
+        endif
+    endfor
+
+    call nvim_win_close(l:window, v:false)
 endfunction
 
 Plug 'universal-ctags/ctags', {
-    \ 'do':
-        \ { info -> PostUpdateHook(info, './autogen.sh && ./configure --prefix=' . shellescape(g:ctags_prefix) . ' && make -j8 && make install') }
-\ }
+    \'do': { info -> PostUpdateHook(info,
+        \[['./autogen.sh'],
+         \['./configure', '--prefix', g:ctags_prefix],
+         \['make', '--jobs', '8'],
+         \['make', 'install']]
+    \)}
+\}
 
 Plug 'majutsushi/tagbar'
 
@@ -193,11 +206,11 @@ Plug 'tweekmonster/startuptime.vim'
 
 " Debugger
 function! InstallGDB(info)
-    call PostUpdateHook(a:info, './install.sh')
+    call PostUpdateHook(a:info, [['./install.sh']])
     UpdateRemotePlugins
 endfunction
 
-Plug 'sakhnik/nvim-gdb', { 'do': funcref('InstallGDB') }
+Plug 'sakhnik/nvim-gdb', { 'do': { info -> InstallGDB(info) } }
 
 call plug#end()
 
@@ -329,7 +342,7 @@ augroup swapexists
         endif
     endfunction
 
-    autocmd SwapExists * call s:HandleSwapExists()
+    autocmd SwapExists * call <SID>HandleSwapExists()
 augroup END
 
 """""""""""""""
@@ -361,12 +374,12 @@ endif
 
 " Automatic syntax checking
 call neomake#configure#automake({
-\ 'TextChanged':  {},
-\ 'TextChangedI': {},
-\ 'InsertLeave':  {},
-\ 'BufWritePost': {'delay': 0},
-\ 'BufReadPost':  {},
-\ }, 500)
+\'TextChanged':  {},
+\'TextChangedI': {},
+\'InsertLeave':  {},
+\'BufWritePost': {'delay': 0},
+\'BufReadPost':  {},
+\}, 500)
 
 let g:neomake_cpp_clang_args = ['-std=c++17', '-Wall', '-Wextra', '-Weffc++']
 let g:neomake_cpp_enabled_makers = ['clang', 'clangtidy', 'cppcheck']
@@ -421,23 +434,23 @@ endfunction
 let g:startify_custom_header = 'startify#center(startify#fortune#boxed())'
 
 let g:startify_lists = [
-    \ { 'type': 'dir',       'header': startify#pad(['Directory']) },
-    \ { 'type': 'bookmarks', 'header': startify#pad(['Bookmarks']) },
-    \ { 'type': 'commands',  'header': startify#pad(['Commands']) },
-\ ]
+    \{ 'type': 'dir',       'header': startify#pad(['Directory']) },
+    \{ 'type': 'bookmarks', 'header': startify#pad(['Bookmarks']) },
+    \{ 'type': 'commands',  'header': startify#pad(['Commands']) },
+\]
 
 let g:startify_use_env = 1
 
 let g:startify_bookmarks = [
-    \ { 'C': '~/.config/nvim/init.vim' },
-    \ { 'Z': '~/.zshrc' },
-    \ { 'N': '~/.config/nixpkgs/overlays/lnl.nix' },
-\ ]
+    \{ 'C': '~/.config/nvim/init.vim' },
+    \{ 'Z': '~/.zshrc' },
+    \{ 'N': '~/.config/nixpkgs/overlays/lnl.nix' },
+\]
 
 let g:startify_commands = [
-    \ { 'up' : ['Update plugins', 'PlugUpdate'] },
-    \ { 'uP' : ['Update plugin manager', 'PlugUpgrade'] },
-\ ]
+    \{ 'up' : ['Update plugins', 'PlugUpdate'] },
+    \{ 'uP' : ['Update plugin manager', 'PlugUpgrade'] },
+\]
 
 let g:startify_change_to_dir = 0
 let g:startify_change_to_vcs_root = 1
@@ -461,13 +474,13 @@ function! FloatingFZF()
     let l:row = float2nr((&lines - l:height) / 2)
 
     call nvim_open_win(buf, v:true, {
-        \ 'relative': 'editor',
-        \ 'row': l:row,
-        \ 'col': l:col,
-        \ 'width': l:width,
-        \ 'height': l:height,
-        \ 'style': 'minimal'
-    \ })
+        \'relative': 'editor',
+        \'row': l:row,
+        \'col': l:col,
+        \'width': l:width,
+        \'height': l:height,
+        \'style': 'minimal'
+    \})
 
     " Close the buffer if you press <ESC>
     execute 'autocmd TermLeave <buffer=' . l:buf . '> close'
@@ -538,14 +551,14 @@ noremap <C-n> :NERDTreeToggle<CR>
 """""""""""
 
 let g:nvimgdb_config_override = {
-    \ 'key_next': 'n',
-    \ 'key_step': 's',
-    \ 'key_finish': 'f',
-    \ 'key_continue': 'c',
-    \ 'key_until': 'u',
-    \ 'key_breakpoint': 'b',
-    \ 'set_tkeymaps': '',
-\ }
+    \'key_next': 'n',
+    \'key_step': 's',
+    \'key_finish': 'f',
+    \'key_continue': 'c',
+    \'key_until': 'u',
+    \'key_breakpoint': 'b',
+    \'set_tkeymaps': '',
+\}
 
 """"""""""
 " TAGBAR "
