@@ -3,30 +3,19 @@ scriptencoding utf-8
 let g:python3_host_prog='/usr/bin/python3'
 set pyxversion=3
 
-"""""""""""
-" PLUGINS "
-"""""""""""
+""""""""""""""""""
+" PLUGIN HELPERS "
+""""""""""""""""""
 
 let g:bundle_directory = stdpath('config') . '/bundle'
-call plug#begin(g:bundle_directory)
 
-" Editor config for working with others
-Plug 'editorconfig/editorconfig-vim'
-
-" Syntax Checking
-Plug 'benekastah/neomake'
-
-" Better Terminals
-Plug 'kassio/neoterm'
-
-" Tagbar
 let g:ctags_prefix = g:bundle_directory . '/ctags-install'
 if !isdirectory(g:ctags_prefix)
     call mkdir(g:ctags_prefix)
 endif
 
 function! PostUpdateHook(info, cmds)
-    if a:info.status ==# 'unchanged'
+    if a:info.status ==# 'unchanged' && !a:info.force
         return
     endif
 
@@ -91,6 +80,22 @@ function! PostUpdateHook(info, cmds)
     call nvim_win_close(l:window, v:false)
 endfunction
 
+"""""""""""
+" PLUGINS "
+"""""""""""
+
+call plug#begin(g:bundle_directory)
+
+" Editor config for working with others
+Plug 'editorconfig/editorconfig-vim'
+
+" Syntax Checking
+Plug 'benekastah/neomake'
+
+" Better Terminals
+Plug 'kassio/neoterm'
+
+" Tagbar
 Plug 'universal-ctags/ctags', {
     \'do': { info -> PostUpdateHook(info,
         \[['./autogen.sh'],
