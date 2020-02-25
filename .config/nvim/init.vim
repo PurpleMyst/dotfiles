@@ -3,16 +3,17 @@ scriptencoding utf-8
 let g:python3_host_prog='/usr/bin/python3'
 set pyxversion=3
 
+let SafeMkdir = { name -> isdirectory(name) ? 0 : mkdir(name) }
+
 """"""""""""""""""
 " PLUGIN HELPERS "
 """"""""""""""""""
 
 let g:bundle_directory = stdpath('config') . '/bundle'
+call SafeMkdir(g:bundle_directory)
 
 let g:ctags_prefix = g:bundle_directory . '/ctags-install'
-if !isdirectory(g:ctags_prefix)
-    call mkdir(g:ctags_prefix)
-endif
+call SafeMkdir(g:ctags_prefix)
 
 function! PostUpdateHook(info, cmds)
     if a:info.status ==# 'unchanged' && !a:info.force
@@ -44,7 +45,7 @@ function! PostUpdateHook(info, cmds)
         let l:chunk = remove(a:data, -1)
 
         " Append the complete lines to the buffer and scroll
-        if len(a:data) != 0
+        if !empty(a:data)
             call nvim_buf_set_lines(l:buf, -1, -1, v:false, a:data)
             call nvim_win_set_cursor(l:window, [nvim_buf_line_count(l:buf), 0])
             redraw!
@@ -84,7 +85,7 @@ endfunction
 " PLUGINS "
 """""""""""
 
-call plug#begin(g:bundle_directory)
+silent! if plug#begin(g:bundle_directory)
 
 " Editor config for working with others
 Plug 'editorconfig/editorconfig-vim'
@@ -147,7 +148,7 @@ Plug 'marcweber/vim-addon-mw-utils'
 Plug 'garbas/vim-snipmate'
 
 " Auto-Completion
-Plug 'neoclide/coc.nvim', { 'do': 'zsh install.sh nightly' }
+Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
 command! -nargs=1 PlugCoc Plug <args>, { 'do': 'yarn install --frozen-lockfile' }
 
 " Auto-Completion plugins
@@ -175,7 +176,7 @@ Plug 'glts/vim-textobj-comment'
 Plug 'scrooloose/nerdtree'
 
 " DevIcons
-Plug 'ryanoasis/vim-devicons'
+if !has('wsl') | Plug 'ryanoasis/vim-devicons' | endif
 
 " Syntax plugins
 Plug 'PotatoesMaster/i3-vim-syntax'
@@ -218,6 +219,7 @@ endfunction
 Plug 'sakhnik/nvim-gdb', { 'do': { info -> InstallGDB(info) } }
 
 call plug#end()
+endif
 
 """"""""""""""""
 " VIM SETTINGS "
@@ -297,6 +299,8 @@ set formatoptions-=o
 " Store backup/swap files in dedicated directories
 let &backupdir=stdpath('config') . '/backup/'
 let &directory=stdpath('config') . '/swap/'
+call SafeMkdir(&backupdir)
+call SafeMkdir(&directory)
 
 " Allows mouse usage (e.g. the scroll wheel)
 set mouse=n
@@ -357,7 +361,7 @@ augroup END
 set background=dark
 let base16colorspace=256
 
-if exists('$BASE16_COLORSCHEME')
+if !empty($BASE16_COLORSCHEME)
     execute ':colorscheme base16-' . $BASE16_COLORSCHEME
 elseif filereadable($HOME . '/.colorscheme')
     execute ':colorscheme base16-' . readfile($HOME . '/.colorscheme')[0]
@@ -366,7 +370,10 @@ else
     " base16 colorschemes and pick one at random.. or as close as we can get to
     " random in VimL
     let s:colors = getcompletion('base16-', 'color')
-    execute ':colorscheme' s:colors[localtime() % len(s:colors)]
+
+    if !empty(s:colors)
+        execute ':colorscheme' s:colors[localtime() % len(s:colors)]
+    endif
 endif
 
 """""""""""""""""""
@@ -378,13 +385,15 @@ endif
 """""""""""
 
 " Automatic syntax checking
-call neomake#configure#automake({
-\'TextChanged':  {},
-\'TextChangedI': {},
-\'InsertLeave':  {},
-\'BufWritePost': {'delay': 0},
-\'BufReadPost':  {},
-\}, 500)
+if exists('*neomake#configure#automake')
+    call neomake#configure#automake({
+    \'TextChanged':  {},
+    \'TextChangedI': {},
+    \'InsertLeave':  {},
+    \'BufWritePost': {'delay': 0},
+    \'BufReadPost':  {},
+    \}, 500)
+endif
 
 let g:neomake_cpp_clang_args = ['-std=c++17', '-Wall', '-Wextra', '-Weffc++']
 let g:neomake_cpp_enabled_makers = ['clang', 'clangtidy', 'cppcheck']
@@ -414,8 +423,8 @@ let g:plug_window = 'enew'
 " AIRLINE/TMUXLINE "
 """"""""""""""""""""
 
-let g:airline_powerline_fonts = 1
-let g:tmuxline_powerline_separators = 1
+let g:airline_powerline_fonts = !has('wsl')
+let g:tmuxline_powerline_separators = !has('wsl')
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tmuxline#enabled = 0
@@ -438,11 +447,13 @@ endfunction
 
 let g:startify_custom_header = 'startify#center(startify#fortune#boxed())'
 
-let g:startify_lists = [
-    \{ 'type': 'dir',       'header': startify#pad(['Directory']) },
-    \{ 'type': 'bookmarks', 'header': startify#pad(['Bookmarks']) },
-    \{ 'type': 'commands',  'header': startify#pad(['Commands']) },
-\]
+if exists('*startify#pad')
+    let g:startify_lists = [
+        \{ 'type': 'dir',       'header': startify#pad(['Directory']) },
+        \{ 'type': 'bookmarks', 'header': startify#pad(['Bookmarks']) },
+        \{ 'type': 'commands',  'header': startify#pad(['Commands']) },
+    \]
+endif
 
 let g:startify_use_env = 1
 
@@ -502,7 +513,10 @@ set signcolumn=yes
 set updatetime=300
 
 let g:airline#extensions#coc#enabled = 1
-let g:airline_section_y = airline#section#create(['%{coc#status()}'])
+
+if exists('*airline#section#create') && exists('*coc#status')
+    let g:airline_section_y = airline#section#create(['%{coc#status()}'])
+endif
 
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
