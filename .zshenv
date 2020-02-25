@@ -3,19 +3,19 @@ safe-source() { [ -f "$1" ] && source "$1" }
 #########
 # $PATH #
 #########
-PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+path=(/usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin)
 
-PATH="$HOME/bin:$PATH"
+path=($HOME/bin $path)
 
-PATH="$HOME/.local/bin:$PATH"
+path=($HOME/.local/bin $path)
 
-PATH="$HOME/.cargo/bin:$PATH"
+path=($HOME/.cargo/bin $path)
 
-PATH="$HOME/.luarocks/bin:$PATH"
+path=($HOME/.luarocks/bin $path)
 
-PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+path=($HOME/.yarn/bin $home/.config/yarn/global/node_modules/.bin $path)
 
-PATH="$HOME/.nimble/bin:$PATH"
+path=($HOME/.nimble/bin $path)
 
 safe-source ~/.ghcup/env
 
@@ -30,17 +30,17 @@ export PATH
 ###########
 # sccache #
 ###########
-export RUSTC_WRAPPER="${commands[sccache]}"
+export RUSTC_WRAPPER=${commands[sccache]}
 
 ###########
 # weechat #
 ###########
-[ -f ~/.weechat-passphrase.txt ] && export WEECHAT_PASSPHRASE=$(cat ~/.weechat-passphrase.txt)
+if [[ -f ~/.weechat-passphrase.txt ]] export WEECHAT_PASSPHRASE=$(<~/.weechat-passphrase.txt)
 
 ########
 # venv #
 ########
-[ -n "$VIRTUAL_ENV" ] && safe-source "$VIRTUAL_ENV/bin/activate"
+if [[ -n $VIRTUAL_ENV ]] safe-source $VIRTUAL_ENV/bin/activate
 
 #################
 # compinit skip #
