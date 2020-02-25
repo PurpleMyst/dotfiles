@@ -477,6 +477,10 @@ let g:startify_change_to_vcs_root = 1
 " FZF "
 """""""
 
+let g:fzf_colors = {
+    \'gutter': ['bg', 'NormalFloat'],
+\}
+
 nnoremap <leader>f :FZF --margin 1<CR>
 
 " FloatingFZF courtesy of https://www.reddit.com/r/neovim/comments/djmehv/-/f463fxr/
