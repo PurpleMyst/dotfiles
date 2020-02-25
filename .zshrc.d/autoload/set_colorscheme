@@ -1,6 +1,6 @@
 # vim: ft=zsh
 
-if [ $# -ne 1 ]; then
+if [[ $# -ne 1 ]]; then
     echo "USAGE: $0 COLORSCHEME"
     return 1
 fi
@@ -11,19 +11,22 @@ if ! [[ -f $BASE16_OUTPUT_DIR/c_header/headers/base16-$1.h ]]; then
 fi
 
 export BASE16_COLORSCHEME=$1
-echo "$BASE16_COLORSCHEME" > ~/.colorscheme
+printf "$BASE16_COLORSCHEME" > ~/.colorscheme
 
 # set x colors
 BASE16_XRESOURCES=$BASE16_OUTPUT_DIR/xresources/xresources/base16-$BASE16_COLORSCHEME-256.Xresources
-if [ -f "$BASE16_XRESOURCES" ]; then
-    [ -f ~/.Xresources.d/colorscheme ] && unlink ~/.Xresources.d/colorscheme
-    ln --physical "$BASE16_XRESOURCES" ~/.Xresources.d/colorscheme
+if [[ -f $BASE16_XRESOURCES ]]; then
+    if [[ -f ~/.Xresources.d/colorscheme ]] unlink ~/.Xresources.d/colorscheme
+    ln --physical $BASE16_XRESOURCES ~/.Xresources.d/colorscheme
 
-    [ "${commands[xrdb]}" ] && xrdb ~/.Xresources
+    if [[ ${commands[xrdb]} ]] xrdb ~/.Xresources
 fi
+unset BASE16_XRESOURCES
 
 # reload i3 colors
-pgrep -c '^i3$' > /dev/null && chronic i3 reload
+if pgrep -c '^i3$' >/dev/null; then
+    chronic i3 reload
+fi
 
 # set shell colors
 [ -f "$BASE16_OUTPUT_DIR/shell/scripts/base16-$BASE16_COLORSCHEME.sh" ] && sh "$BASE16_OUTPUT_DIR/shell/scripts/base16-$BASE16_COLORSCHEME.sh"
