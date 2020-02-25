@@ -5,6 +5,11 @@ if [ $# -ne 1 ]; then
     return 1
 fi
 
+if ! [[ -f $BASE16_OUTPUT_DIR/c_header/headers/base16-$1.h ]]; then
+    echo "Unknown colorscheme."
+    return 1
+fi
+
 export BASE16_COLORSCHEME=$1
 echo "$BASE16_COLORSCHEME" > ~/.colorscheme
 
