@@ -451,18 +451,16 @@ endfunction
 
 let g:startify_custom_header = 'startify#center(startify#fortune#boxed())'
 
-if exists('*startify#pad')
-    let g:startify_lists = [
-        \{ 'type': 'dir',       'header': startify#pad(['Directory']) },
-        \{ 'type': 'bookmarks', 'header': startify#pad(['Bookmarks']) },
-        \{ 'type': 'commands',  'header': startify#pad(['Commands']) },
-    \]
-endif
+let g:startify_lists = [
+    \{ 'type': 'dir',       'header': startify#pad(['Directory']) },
+    \{ 'type': 'bookmarks', 'header': startify#pad(['Bookmarks']) },
+    \{ 'type': 'commands',  'header': startify#pad(['Commands']) },
+\]
 
 let g:startify_use_env = 1
 
 let g:startify_bookmarks = [
-    \{ 'C': '~/.config/nvim/init.vim' },
+    \{ 'C': stdpath('config') . '/init.vim' },
     \{ 'Z': '~/.zshrc' },
     \{ 'N': '~/.config/nixpkgs/overlays/lnl.nix' },
 \]
@@ -486,7 +484,6 @@ let g:fzf_layout = { 'window': 'call FloatingFZF()' }
 
 function! FloatingFZF()
     let l:buf = nvim_create_buf(v:false, v:true)
-    call setbufvar(buf, '&signcolumn', 'no')
 
     let l:width = float2nr(80)
     let l:height = float2nr(10)
