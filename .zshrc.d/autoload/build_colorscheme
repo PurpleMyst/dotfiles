@@ -4,6 +4,11 @@ if ! [ -d "$BASE16_OUTPUT_DIR" ]; then
     fi
 
     pushd "$(dirname "$BASE16_OUTPUT_DIR")" || return 1
+
+    # install pybase16.py dependencies
+    awk -F= '/install_requires/ { gsub(/[,"\[\]]/, ""); print $2 }' setup.py \
+        | xargs python3 -m pip install --user
+
     python3 pybase16.py update && python3 pybase16.py build
     popd || exit 1
 fi
