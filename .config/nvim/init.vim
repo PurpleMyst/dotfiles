@@ -134,7 +134,11 @@ Plug 'wellle/targets.vim'
 Plug 'mhinz/vim-startify'
 
 " Colorscheme
-Plug 'chriskempson/base16-vim'
+if empty($BASE16_OUTPUT_DIR)
+    Plug 'chriskempson/base16-vim'
+else
+    call plug#($BASE16_OUTPUT_DIR . '/vim')
+endif
 
 " (NeoVim + tmux) status line
 Plug 'bling/vim-airline' | Plug 'edkolev/tmuxline.vim' | Plug 'vim-airline/vim-airline-themes'
