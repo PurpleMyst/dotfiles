@@ -24,3 +24,7 @@
 
 # Create a Tmuxline config on login
 tmux new-session -d "nvim +Tmuxline +'TmuxlineSnapshot $HOME/.tmuxline.conf' +q" &!
+
+if grep -q Microsoft /proc/version; then
+    umask 022
+fi
