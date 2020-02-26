@@ -1,5 +1,5 @@
 export BASE16_BUILDER_REPO='https://github.com/InspectorMustache/base16-builder-python.git'
-export BASE16_OUTPUT_DIR="$HOME/applications/base16-builder/output"
+export BASE16_OUTPUT_DIR="$HOME/apps/base16-builder/output"
 
 if [[ -f ~/.colorscheme ]] export BASE16_COLORSCHEME=$(<~/.colorscheme)
 

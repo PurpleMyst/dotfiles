@@ -32,9 +32,7 @@
   "python.linting.mypyEnabled": true,
   "python.linting.mypyArgs": ["--ignore-missing-imports","--follow-imports=silent","--show-column-numbers", "--strict", "--strict-equality"],
   "python.linting.flake8Args": ["--max-line-length=120"],
+
   "tsserver.enableJavascript": true,
-  "coc.source.omni.triggerCharacters": ["."],
-  "coc.source.omni.enable": true,
-  "coc.source.omni.filetypes": ["gdscript"],
-  "elixir.pathToElixirLS": "~/applications/elixir-ls/release/language_server.sh"
+  "elixir.pathToElixirLS": "~/apps/elixir-ls/release/language_server.sh"
 }

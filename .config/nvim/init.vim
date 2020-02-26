@@ -103,7 +103,7 @@ PlugCoc 'amiralies/coc-elixir'
 PlugCoc 'neoclide/coc-snippets'
 
 " Fuzzy finder
-Plug 'junegunn/fzf', { 'dir': '~/applications/fzf', 'do': './install --all --no-update-rc' }
+Plug 'junegunn/fzf', { 'dir': '~/apps/fzf', 'do': './install --all --no-update-rc' }
 
 " Custom text objects
 Plug 'kana/vim-textobj-user'
