@@ -324,15 +324,13 @@ endif
 """""""""""
 
 " Automatic syntax checking
-if exists('*neomake#configure#automake')
-    call neomake#configure#automake({
-    \'TextChanged':  {},
-    \'TextChangedI': {},
-    \'InsertLeave':  {},
-    \'BufWritePost': {'delay': 0},
-    \'BufReadPost':  {},
-    \}, 500)
-endif
+silent! call neomake#configure#automake({
+\'TextChanged':  {},
+\'TextChangedI': {},
+\'InsertLeave':  {},
+\'BufWritePost': {'delay': 0},
+\'BufReadPost':  {},
+\}, 500)
 
 let g:neomake_cpp_clang_args = ['-std=c++17', '-Wall', '-Wextra', '-Weffc++']
 let g:neomake_cpp_enabled_makers = ['clang', 'clangtidy', 'cppcheck']
@@ -376,8 +374,10 @@ let g:tmuxline_preset = 'tmux'
 
 " This function is used in ftplugin/
 function! SetRainbowParentheses()
-    autocmd rainbow BufEnter <buffer> RainbowParentheses
-    autocmd rainbow BufLeave <buffer> RainbowParentheses!
+    augroup rainbow
+        autocmd BufEnter <buffer> RainbowParentheses
+        autocmd BufLeave <buffer> RainbowParentheses!
+    augroup END
 endfunction
 
 """"""""""""
@@ -454,9 +454,7 @@ set updatetime=300
 
 let g:airline#extensions#coc#enabled = 1
 
-if exists('*airline#section#create') && exists('*coc#status')
-    let g:airline_section_y = airline#section#create(['%{coc#status()}'])
-endif
+silent! let g:airline_section_y = airline#section#create(['%{coc#status()}'])
 
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
