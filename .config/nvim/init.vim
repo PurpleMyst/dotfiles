@@ -86,8 +86,8 @@ Plug 'marcweber/vim-addon-mw-utils'
 Plug 'garbas/vim-snipmate'
 
 " Auto-Completion
-Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
-command! -nargs=1 PlugCoc Plug <args>, { 'do': 'yarn install --frozen-lockfile' }
+Plug 'neoclide/coc.nvim', { 'do': 'npx yarn install --frozen-lockfile' }
+command! -nargs=1 PlugCoc Plug <args>, { 'do': 'npx yarn install --frozen-lockfile' }
 
 " Auto-Completion plugins
 PlugCoc 'neoclide/coc-tsserver'
