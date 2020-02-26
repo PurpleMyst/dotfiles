@@ -93,7 +93,7 @@ command! -nargs=1 PlugCoc Plug <args>, { 'do': 'npx yarn install --frozen-lockfi
 PlugCoc 'neoclide/coc-tsserver'
 PlugCoc 'neoclide/coc-sources'
 PlugCoc 'neoclide/coc-tslint-plugin'
-PlugCoc 'neoclide/coc-rls'
+PlugCoc 'fannheyward/coc-rust-analyzer'
 PlugCoc 'neoclide/coc-python'
 PlugCoc 'neoclide/coc-json'
 PlugCoc 'neoclide/coc-css'
