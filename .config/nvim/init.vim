@@ -135,6 +135,7 @@ Plug 'zah/nim.vim', { 'for': 'nim' }
 Plug 'wlangstroth/vim-racket', { 'for': 'racket' }
 Plug 'calviken/vim-gdscript3'
 Plug 'LnL7/vim-nix'
+Plug 'vmchale/dhall-vim'
 
 " Rainbow parenthesis
 Plug 'junegunn/rainbow_parentheses.vim'
