@@ -1,5 +1,10 @@
 #!/usr/bin/env sh
 
+if [ $# -eq 0 ]; then
+    printf "USAGE: git ignore FILETYPE [FILETYPE ...]\n" >&2
+    exit 1
+fi
+
 join_args() {
     joiner="$1"
     shift
