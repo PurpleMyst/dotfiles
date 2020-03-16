@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-set -eo pipefail
+set -euo pipefail
 
 git status --porcelain --untracked-files=no -z \
     | sed -E -n -z 's/^\s*M\s*(.+)/\1/p' \

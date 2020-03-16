@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 if [ $# -eq 0 ]; then
-    printf "USAGE: git ignore FILETYPE [FILETYPE ...]\n" >&2
+    printf 'USAGE: git ignore FILETYPE [FILETYPE ...]\n' >&2
     exit 1
 fi
 
@@ -9,7 +9,7 @@ join_args() {
     joiner="$1"
     shift
 
-    printf "%s" "$1"
+    printf '%s' "$1"
     shift
 
     if [ $# -gt 0 ]; then
