@@ -18,4 +18,4 @@ alias gst="git status"
 alias gp="git push"
 
 # python
-alias pi="python3 -m pip install --user"
+alias pipi="python3 -m pip install --user"
