@@ -453,7 +453,7 @@ set updatetime=300
 
 let g:airline#extensions#coc#enabled = 1
 
-silent! let g:airline_section_y = airline#section#create(['%{coc#status()}'])
+" silent! let g:airline_section_y = airline#section#create(['%{coc#status()}'])
 
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
