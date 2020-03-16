@@ -28,6 +28,7 @@
     }
   },
 
+  "python.pythonPath": "/usr/bin/python3",
   "python.linting.pylintEnabled": false,
   "python.linting.mypyEnabled": true,
   "python.linting.mypyArgs": ["--ignore-missing-imports","--follow-imports=silent","--show-column-numbers", "--strict", "--strict-equality"],
