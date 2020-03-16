@@ -97,7 +97,6 @@ PlugCoc 'fannheyward/coc-rust-analyzer'
 PlugCoc 'neoclide/coc-python'
 PlugCoc 'neoclide/coc-json'
 PlugCoc 'neoclide/coc-css'
-PlugCoc 'amiralies/coc-elixir'
 
 " Snippets
 PlugCoc 'neoclide/coc-snippets'

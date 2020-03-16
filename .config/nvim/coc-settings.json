@@ -34,6 +34,5 @@
   "python.linting.mypyArgs": ["--ignore-missing-imports","--follow-imports=silent","--show-column-numbers", "--strict", "--strict-equality"],
   "python.linting.flake8Args": ["--max-line-length=120"],
 
-  "tsserver.enableJavascript": true,
-  "elixir.pathToElixirLS": "~/apps/elixir-ls/release/language_server.sh"
+  "tsserver.enableJavascript": true
 }
