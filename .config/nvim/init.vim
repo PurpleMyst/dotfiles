@@ -58,8 +58,9 @@ Plug 'tpope/vim-repeat'
 " Easy commenting
 Plug 'tpope/vim-commentary'
 
-" Highlight what you yank
+" Highlight what you yank/undo
 Plug 'machakann/vim-highlightedyank'
+Plug 'machakann/vim-highlightedundo'
 
 " More targets
 Plug 'wellle/targets.vim'
@@ -489,6 +490,8 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 nmap <silent> <leader>ac  <Plug>(coc-codeaction)
+xmap <silent> <leader>ac  <Plug>(coc-codeaction)
+
 nmap <silent> <leader>qf  <Plug>(coc-fix-current)
 
 xmap <silent> <leader>a  <Plug>(coc-codeaction-selected)
