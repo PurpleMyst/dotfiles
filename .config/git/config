@@ -1,15 +1,14 @@
 [user]
+	name = PurpleMyst
 	email = PurpleMyst@users.noreply.github.com
-	name = Purple Myst
-[credential]
-	helper = store
-[push]
-	default = simple
-[core]
-	editor = nvim
-	pager = diff-so-fancy | less --tabs=4 -RFX
 [alias]
 	graph = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	cane = commit -a --amend --no-edit
+	cam = commit -a -m
+	c = commit
+	p = push
+[push]
+	default = simple
 [pull]
 	rebase = true
 [color]
@@ -26,3 +25,8 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
