@@ -3,14 +3,10 @@
 # If no argument is passed, defaults to the current directory.
 # Useful if you don't want to use a file-sharing service.
 
-if [ $# -eq 1 ]; then
-    dir="$1"
-else
-    dir="."
-fi
+dir=${1:-.}
 
 name="$(basename $(realpath $dir))"
-if [ -z "$name" ]; then
+if [[ -z "$name" ]]; then
     echo "Could not get path of $dir" >&2
     return 1
 else
