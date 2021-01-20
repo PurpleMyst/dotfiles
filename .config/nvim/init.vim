@@ -9,7 +9,7 @@ let SafeMkdir = { name -> isdirectory(name) ? 0 : mkdir(name) }
 " PLUGIN HELPERS "
 """"""""""""""""""
 
-let g:bundle_directory = stdpath('config') . '/bundle'
+let g:bundle_directory = stdpath('data') . '/bundle'
 call SafeMkdir(g:bundle_directory)
 
 let g:ctags_prefix = g:bundle_directory . '/ctags-install'
@@ -114,7 +114,9 @@ Plug 'glts/vim-textobj-comment'
 Plug 'scrooloose/nerdtree'
 
 " DevIcons
-if !has('wsl') | Plug 'ryanoasis/vim-devicons' | endif
+"if !has('wsl')
+    "Plug 'ryanoasis/vim-devicons'
+"endif
 
 " Syntax plugins
 Plug 'PotatoesMaster/i3-vim-syntax'
@@ -312,6 +314,8 @@ else
 
     if !empty(s:colors)
         execute ':colorscheme' s:colors[localtime() % len(s:colors)]
+    else
+        colorscheme industry
     endif
 endif
 
