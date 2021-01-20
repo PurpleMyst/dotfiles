@@ -1,14 +1,22 @@
 if ! [ -d "$BASE16_OUTPUT_DIR" ]; then
+    # Clone the repo if we've not already done so
     if ! [ -d "$(dirname "$BASE16_OUTPUT_DIR")" ]; then
-        git clone -q "$BASE16_BUILDER_REPO" "$(dirname "$BASE16_OUTPUT_DIR")"
+        echo "Cloning base16 builder repo"
+        git clone "$BASE16_BUILDER_REPO" "$(dirname "$BASE16_OUTPUT_DIR")"
     fi
 
+    # Enter the repo directory
     pushd "$(dirname "$BASE16_OUTPUT_DIR")" || return 1
 
-    # install pybase16.py dependencies
-    awk -F= '/install_requires/ { gsub(/[,"\[\]]/, ""); print $2 }' setup.py \
-        | xargs python3 -m pip install --user
+    # Checkout a known-good commit
+    git checkout b707633eb1132042d557150df6c167fc6a92a4b5
 
+    # Install the dependencies
+    python3 -m pip install --user pystache pyyaml aiofiles
+
+    # Update and build our colorschemes
     python3 pybase16.py update && python3 pybase16.py build
-    popd || exit 1
+
+    # Exit the repo directory
+    popd || return 1
 fi

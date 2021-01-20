@@ -29,5 +29,8 @@ if pgrep -c '^i3$' >/dev/null; then
 fi
 
 # set shell colors
-[ -f "$BASE16_OUTPUT_DIR/shell/scripts/base16-$BASE16_COLORSCHEME.sh" ] && sh "$BASE16_OUTPUT_DIR/shell/scripts/base16-$BASE16_COLORSCHEME.sh"
+if [[ -f "$BASE16_OUTPUT_DIR/shell/scripts/base16-$BASE16_COLORSCHEME.sh" ]]; then
+    sh "$BASE16_OUTPUT_DIR/shell/scripts/base16-$BASE16_COLORSCHEME.sh"
+fi
+
 # vim ft=zsh
