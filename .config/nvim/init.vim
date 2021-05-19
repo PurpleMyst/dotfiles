@@ -69,10 +69,10 @@ Plug 'wellle/targets.vim'
 Plug 'mhinz/vim-startify'
 
 " Colorscheme
-if empty($BASE16_OUTPUT_DIR)
-    Plug 'chriskempson/base16-vim'
-else
+if isdirectory($BASE16_OUTPUT_DIR)
     call plug#($BASE16_OUTPUT_DIR . '/vim')
+else
+    Plug 'chriskempson/base16-vim'
 endif
 
 " (NeoVim + tmux) status line
@@ -238,8 +238,8 @@ set formatoptions-=t
 set formatoptions-=o
 
 " Store backup/swap files in dedicated directories
-let &backupdir=stdpath('config') . '/backup/'
-let &directory=stdpath('config') . '/swap/'
+let &backupdir=stdpath('data') . '/backup/'
+let &directory=stdpath('data') . '/swap/'
 call SafeMkdir(&backupdir)
 call SafeMkdir(&directory)
 
@@ -247,7 +247,7 @@ call SafeMkdir(&directory)
 set mouse=n
 
 " Keep undo history even after exiting a file
-let &undodir=stdpath('config') . '/undo/'
+let &undodir=stdpath('data') . '/undo/'
 set undofile
 
 " Shows a command's effect as you type it
@@ -364,8 +364,8 @@ let g:plug_window = 'enew'
 " AIRLINE/TMUXLINE "
 """"""""""""""""""""
 
-let g:airline_powerline_fonts = !has('wsl')
-let g:tmuxline_powerline_separators = !has('wsl')
+let g:airline_powerline_fonts = 1
+let g:tmuxline_powerline_separators = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tmuxline#enabled = 0
@@ -390,11 +390,13 @@ endfunction
 
 let g:startify_custom_header = 'startify#center(startify#fortune#boxed())'
 
+if exists('*startify#pad')
 let g:startify_lists = [
     \{ 'type': 'dir',       'header': startify#pad(['Directory']) },
     \{ 'type': 'bookmarks', 'header': startify#pad(['Bookmarks']) },
     \{ 'type': 'commands',  'header': startify#pad(['Commands']) },
 \]
+endif
 
 let g:startify_use_env = 1
 
