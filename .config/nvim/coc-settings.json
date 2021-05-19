@@ -14,24 +14,19 @@
       "initializationOptions": {
         "cacheDirectory": "/tmp/cquery"
       }
-    },
-
-    "dls": {
-      "command": "/home/au/.dub/packages/.bin/dls-latest/dls",
-      "filetypes": ["d"]
-    },
-
-    "nimlsp": {
-       "command": "nimlsp",
-       "args": ["/home/au/.nimble/pkgs/nimlsp-0.1.0/nimlsppkg/Nim"],
-       "filetypes": ["nim"]
     }
   },
 
   "python.pythonPath": "/usr/bin/python3",
   "python.linting.pylintEnabled": false,
   "python.linting.mypyEnabled": true,
-  "python.linting.mypyArgs": ["--ignore-missing-imports","--follow-imports=silent","--show-column-numbers", "--strict", "--strict-equality"],
+  "python.linting.mypyArgs": [
+    "--ignore-missing-imports",
+    "--follow-imports=silent",
+    "--show-column-numbers",
+    "--strict",
+    "--strict-equality"
+  ],
   "python.linting.flake8Args": ["--max-line-length=120"],
 
   "tsserver.enableJavascript": true
